@@ -1,0 +1,4027 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://www.cnblogs.com/alineverstop/p/19898832 -->
+<html lang="zh-cn" style="--olcb-folder-code-block-max-height: 80vh; --cnb-code-bg: rgb(245, 245, 245); --cnb-code-font-size: 12px; --cnb-code-color: rgb(68, 68, 68);"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">            
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <title>Linux进阶--日志管理 - NE_STOP - 博客园</title>
+    <meta name="keywords" content="操作系统,Linux">
+    <meta name="description" content="日志管理 Linux日志介绍 日志文件是重要的系统信息文件，其中记录了许多重要的系统事件，包括用户的登录信息，系统的启动信息，系统的安全信息、邮件相关信息、各种服务相关信息等。 日志记录了系统每天发生的各种事情，通过日志来检查错误发生的原因，或者收到攻击时攻击者留下的痕迹。 总之，日志是用来记录重大">    
+    <meta property="og:description" content="日志管理 Linux日志介绍 日志文件是重要的系统信息文件，其中记录了许多重要的系统事件，包括用户的登录信息，系统的启动信息，系统的安全信息、邮件相关信息、各种服务相关信息等。 日志记录了系统每天发生的各种事情，通过日志来检查错误发生的原因，或者收到攻击时攻击者留下的痕迹。 总之，日志是用来记录重大">
+    <meta property="og:image" content="https://img2024.cnblogs.com/blog/3388489/202604/3388489-20260421093649206-2136172853.png">    
+    
+    <style>#home :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs), :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs) {background: rgb(245, 245, 245);
+        padding: 12px;
+        border: 1px solid rgb(204, 204, 204);
+        border-radius: 3px;
+        border-color: transparent;
+        color: rgb(68, 68, 68);
+        font-family: Consolas, "Courier New", sans-serif, Consolas, Monaco;
+        font-size: 12px</style><link rel="stylesheet" href="./Linux进阶--日志管理 - NE_STOP - 博客园_files/blog-common.min.css">
+    
+
+    <link id="MainCss" rel="stylesheet" href="./Linux进阶--日志管理 - NE_STOP - 博客园_files/bundle-simpleblue.min.css">
+        <link id="highlighter-theme-cnblogs" type="text/css" rel="stylesheet" href="./Linux进阶--日志管理 - NE_STOP - 博客园_files/cnblogs.css">
+    
+    <link type="text/css" rel="stylesheet" href="./Linux进阶--日志管理 - NE_STOP - 博客园_files/Consolas.min.css">
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./Linux进阶--日志管理 - NE_STOP - 博客园_files/bundle-simpleblue-mobile.min.css">
+    
+    <link id="favicon" rel="icon" type="image/x-icon" sizes="32x32" href="https://assets.cnblogs.com/favicon_v3_3.ico">
+    <link id="favicon_svg" rel="icon" type="image/svg+xml" href="https://assets.cnblogs.com/favicon_v3_3.svg">
+    <link rel="apple-touch-icon" href="https://assets.cnblogs.com/apple-touch-icon.png">
+    <link rel="canonical" href="https://www.cnblogs.com/alineverstop/p/19898832">
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/alineverstop/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/alineverstop/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/alineverstop/wlwmanifest.xml">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "@id": "https://www.cnblogs.com/alineverstop/p/19898832",
+      "headline": "Linux进阶--日志管理",
+      "description": "日志管理 Linux日志介绍 日志文件是重要的系统信息文件，其中记录了许多重要的系统事件，包括用户的登录信息，系统的启动信息，系统的安全信息、邮件相关信息、各种服务相关信息等。 日志记录了系统每天发生的各种事情，通过日志来检查错误发生的原因，或者收到攻击时攻击者留下的痕迹。 总之，日志是用来记录重大",
+      "image": [
+        
+      ],
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.cnblogs.com/alineverstop/",
+        "name": "NE_STOP",
+        "url": "https://www.cnblogs.com/alineverstop/"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "@id": "https://www.cnblogs.com/",
+        "name": "博客园",
+        "url": "https://www.cnblogs.com/"
+      },
+      "datePublished": "2026-04-21T09:38:00.0000000&#x2B;08:00",
+      "dateModified": "2026-04-21T09:43:00.0000000&#x2B;08:00",
+      "wordCount": "3848",
+      "isPartOf": {
+        "@type": "Blog",
+        "@id": "https://www.cnblogs.com/alineverstop/",
+        "name": "alineverstop",
+        "publisher": {
+          "@type": "Organization",
+          "@id": "https://www.cnblogs.com/",
+          "name": "博客园"
+        }
+      }
+    }
+    </script>
+
+    <script>
+        var currentBlogId = 816429;
+        var currentBlogApp = 'alineverstop';
+        var isLogined = true;
+        var isBlogOwner = false;
+        window.isCorp = false;
+        window.skinName = 'SimpleBlue';
+        var visitorUserId = '74fa9dbf-bf5f-42ce-f052-08d95a4b5cdb';
+        window.hasCustomScript = false;
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 1;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false;        
+    </script>
+        <script>
+            window.currentPostId = 19898832;
+            window.currentPostDateAdded = '2026-04-21 09:38';
+        </script>
+    <script src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/jquery-3.3.1.min.js.下载"></script>
+    <script src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/blog-common.min.js.下载"></script><style>.medium-zoom-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 300ms;
+  will-change: opacity;
+}
+
+.medium-zoom--opened .medium-zoom-overlay {
+  cursor: pointer;
+  cursor: zoom-out;
+  opacity: 1;
+}
+
+.medium-zoom-image {
+  cursor: pointer;
+  cursor: zoom-in;
+  /*
+    The `transition` is marked as "!important" for the animation to happen
+    even though it's overriden by another inline `transition` style attribute.
+
+    This is problematic with frameworks that generate inline styles on their
+    images (e.g. Gatsby).
+
+    See https://github.com/francoischalifour/medium-zoom/issues/110
+   */
+  transition: transform 300ms cubic-bezier(0.2, 0, 0.2, 1) !important;
+}
+
+.medium-zoom-image--hidden {
+  visibility: hidden;
+}
+
+.medium-zoom-image--opened {
+  position: relative;
+  cursor: pointer;
+  cursor: zoom-out;
+  will-change: transform;
+}
+</style><script id="hljs-script" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/highlight.min.js.下载" type="text/javascript" async=""></script>
+    
+<style data-id="immersive-translate-input-injected-css">.immersive-translate-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 2147483647;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.immersive-translate-attach-loading::after {
+  content: " ";
+
+  --loading-color: #f78fb6;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: block;
+  margin: 12px auto;
+  position: relative;
+  color: white;
+  left: -100px;
+  box-sizing: border-box;
+  animation: immersiveTranslateShadowRolling 1.5s linear infinite;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-2000%, -50%);
+  z-index: 100;
+}
+
+.immersive-translate-loading-spinner {
+  vertical-align: middle !important;
+  width: 10px !important;
+  height: 10px !important;
+  display: inline-block !important;
+  margin: 0 4px !important;
+  border: 2px rgba(221, 244, 255, 0.6) solid !important;
+  border-top: 2px rgba(0, 0, 0, 0.375) solid !important;
+  border-left: 2px rgba(0, 0, 0, 0.375) solid !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  -webkit-animation: immersive-translate-loading-animation 0.6s infinite linear !important;
+  animation: immersive-translate-loading-animation 0.6s infinite linear !important;
+}
+
+@-webkit-keyframes immersive-translate-loading-animation {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+@keyframes immersive-translate-loading-animation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.immersive-translate-input-loading {
+  --loading-color: #f78fb6;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: block;
+  margin: 12px auto;
+  position: relative;
+  color: white;
+  left: -100px;
+  box-sizing: border-box;
+  animation: immersiveTranslateShadowRolling 1.5s linear infinite;
+}
+
+@keyframes immersiveTranslateShadowRolling {
+  0% {
+    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0),
+      0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  12% {
+    box-shadow: 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0),
+      0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  25% {
+    box-shadow: 110px 0 var(--loading-color), 100px 0 var(--loading-color),
+      0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  36% {
+    box-shadow: 120px 0 var(--loading-color), 110px 0 var(--loading-color),
+      100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  50% {
+    box-shadow: 130px 0 var(--loading-color), 120px 0 var(--loading-color),
+      110px 0 var(--loading-color), 100px 0 var(--loading-color);
+  }
+
+  62% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color),
+      120px 0 var(--loading-color), 110px 0 var(--loading-color);
+  }
+
+  75% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      130px 0 var(--loading-color), 120px 0 var(--loading-color);
+  }
+
+  87% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color);
+  }
+
+  100% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.immersive-translate-modal {
+  position: fixed;
+  z-index: 2147483647;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  font-size: 15px;
+}
+
+.immersive-translate-modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 40px 24px 24px;
+  border-radius: 12px;
+  width: 350px;
+  font-family: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu",
+    "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+  .immersive-translate-modal-content {
+    margin: 25% auto !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .immersive-translate-modal-content {
+    width: 80vw !important;
+    margin: 20vh auto !important;
+    padding: 20px 12px 12px !important;
+  }
+
+  .immersive-translate-modal-title {
+    font-size: 14px !important;
+  }
+
+  .immersive-translate-modal-body {
+    font-size: 13px !important;
+    max-height: 60vh !important;
+  }
+
+  .immersive-translate-btn {
+    font-size: 13px !important;
+    padding: 8px 16px !important;
+    margin: 0 4px !important;
+  }
+
+  .immersive-translate-modal-footer {
+    gap: 6px !important;
+    margin-top: 16px !important;
+  }
+}
+
+.immersive-translate-modal .immersive-translate-modal-content-in-input {
+  max-width: 500px;
+}
+.immersive-translate-modal-content-in-input .immersive-translate-modal-body {
+  text-align: left;
+  max-height: unset;
+}
+
+.immersive-translate-modal-title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.immersive-translate-modal-body {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333333;
+  margin-top: 24px;
+}
+
+@media screen and (max-width: 768px) {
+  .immersive-translate-modal-body {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+}
+
+.immersive-translate-close {
+  color: #666666;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.immersive-translate-close:hover,
+.immersive-translate-close:focus {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.immersive-translate-modal-footer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.immersive-translate-btn {
+  width: fit-content;
+  color: #fff;
+  background-color: #ea4c89;
+  border: none;
+  font-size: 14px;
+  margin: 0 8px;
+  padding: 9px 30px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.immersive-translate-btn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.immersive-translate-btn:hover {
+  background-color: #f082ac;
+}
+.immersive-translate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.immersive-translate-btn:disabled:hover {
+  background-color: #ea4c89;
+}
+
+.immersive-translate-link-btn {
+  background-color: transparent;
+  color: #ea4c89;
+  border: none;
+  cursor: pointer;
+  height: 30px;
+  line-height: 30px;
+}
+
+.immersive-translate-cancel-btn {
+  /* gray color */
+  background-color: rgb(89, 107, 120);
+}
+
+.immersive-translate-cancel-btn:hover {
+  background-color: hsl(205, 20%, 32%);
+}
+
+.immersive-translate-action-btn {
+  background-color: transparent;
+  color: #ea4c89;
+  border: 1px solid #ea4c89;
+}
+
+.immersive-translate-btn svg {
+  margin-right: 5px;
+}
+
+.immersive-translate-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  color: #ea4c89;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+.immersive-translate-primary-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  color: #ea4c89;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+.immersive-translate-modal input[type="radio"] {
+  margin: 0 6px;
+  cursor: pointer;
+}
+
+.immersive-translate-modal label {
+  cursor: pointer;
+}
+
+.immersive-translate-close-action {
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  cursor: pointer;
+}
+
+.imt-primary-button {
+  display: flex;
+  padding: 12px 80px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  background: #ea4c89;
+  color: #fff;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  border: none;
+  cursor: pointer;
+}
+
+.imt-retry-text {
+  color: #999;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px;
+  cursor: pointer;
+}
+
+.imt-action-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.imt-modal-content-text {
+  text-align: left;
+  color: #333;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.imt-linear-gradient-text {
+  background: linear-gradient(90deg, #00a6ff 0%, #c369ff 52.4%, #ff4590 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.imt-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imt-linear-black-btn {
+  border-radius: 50px;
+  background: linear-gradient(66deg, #222 19%, #696969 94.25%);
+  height: 48px;
+  width: 100%;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: center;
+}
+</style></head>
+<body class="skin-simpleblue has-navbar hljs-engine">
+    <a name="top"></a>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/logo.svg" alt="博客园logo">
+                    </a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                <li><a href="https://cnblogs.vip/store">周边</a></li>
+                <li><a href="https://news.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-news&#39;)">新闻</a></li>
+                <li><a href="https://q.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-q&#39;)">博问</a></li>
+                <li><a href="https://ing.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-ing&#39;)">闪存</a></li>                
+                <li><a href="https://www.cnblogs.com/cmt/p/19316348">赞助商</a></li>
+                <li><a href="https://youclaw.dev/" target="_blank" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-youclaw&#39;)">YouClaw</a></li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off">
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/search.svg" alt="搜索">
+                            <img class="hidden focus-visible" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/enter.svg" alt="搜索">
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById(&#39;zzk_search_input&#39;).value)">
+                                <div class="keyword-wrapper">
+                                    <img src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/search.svg" alt="搜索">
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, &#39;alineverstop&#39;, document.getElementById(&#39;zzk_search_input&#39;).value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/search.svg" alt="搜索">
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                                    <li tabindex="2" onclick="zzkBlogSearch(event, &#39;niubilityoptimus&#39;, document.getElementById(&#39;zzk_search_input&#39;).value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/search.svg" alt="搜索">
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">我的博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔" style="display: inline;">
+                        <img id="new_post_icon" class="navbar-icon" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/newpost.svg" alt="写随笔">
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://www.cnblogs.com/niubilityoptimus" alt="我的博客" title="我的博客" style="display: inline;">
+                        <img id="myblog_icon" class="navbar-icon" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/myblog.svg" alt="我的博客">
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息" style="display: inline;">
+                        <img id="msg_icon" class="navbar-icon" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/message.svg" alt="短消息">
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/lite-mode-on.svg" alt="简洁模式">
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown" style="display: block;">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/u/niubilityoptimus">
+                            <img id="user_icon" class="navbar-avatar" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/default-avatar.png" alt="用户头像">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://www.cnblogs.com/niubilityoptimus">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="https://vip.cnblogs.com/my">会员中心</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup" style="display: none;">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()" style="display: none;">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <div id="home">
+    <div id="header">
+        <div id="blogTitle">
+            <div class="title"><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/alineverstop">alineverstop</a>
+</div>
+<div class="subtitle"></div>
+
+        </div>
+        <div id="navigator">
+            
+<ul id="navList">
+    <li id="nav_sitehome"><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+    <li id="nav_myhome">
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/alineverstop/">
+首页</a>
+</li>
+    <li id="nav_newpost">
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+    <li id="nav_contact">
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/NE_STOP">
+联系</a></li>
+    <li id="nav_rss">
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/alineverstop/rss/">订阅</a></li>
+    <li id="nav_admin">
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+            <div class="blogStats">
+                <div id="blog_stats_place_holder"><script>loadBlogStats();</script></div>
+            </div>
+        </div>
+    </div>
+    <div id="main">
+        <div id="mainContent">
+            <div class="forFlow">
+                <div id="post_detail">
+    <div id="topics">
+        <div class="post">
+            <h1 class="postTitle">
+                <a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/alineverstop/p/19898832" title="发布于 2026-04-21 09:38">
+    <span role="heading" aria-level="2">Linux进阶--日志管理</span>
+    
+
+</a><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body cnblogs-markdown"><div class="current-collection"><div class="current-collection-title"><a href="https://www.cnblogs.com/alineverstop/collections/39009" target="_blank" class="clickable title-link">合集 - Linux(10)</a><div class="current-collection-title-buttons"><div class="icon-button icon-pin clickable"></div><div class="current-collection-title-arrow icon-button icon-arrow clickable"></div></div></div><div class="current-collection-links" aria-roledescription="list"><a class="current-collection-item current-collection-link clickable" data-serial="1" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19845743"><span class="current-collection-item-serial">1.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux基础--系统安装与文件目录说明">基础--系统安装与文件目录说明</span><time class="current-collection-publish-date" title="2026年04月10日 11:17" datetime="2026-04-10 11:17">04-10</time></a><a class="current-collection-item current-collection-link clickable" data-serial="2" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19860699"><span class="current-collection-item-serial">2.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux入门--远程登录与用户管理">入门--远程登录与用户管理</span><time class="current-collection-publish-date" title="2026年04月13日 16:46" datetime="2026-04-13 16:46">04-13</time></a><a class="current-collection-item current-collection-link clickable" data-serial="3" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19860714"><span class="current-collection-item-serial">3.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux入门--实用指令">入门--实用指令</span><time class="current-collection-publish-date" title="2026年04月13日 16:48" datetime="2026-04-13 16:48">04-13</time></a><a class="current-collection-item current-collection-link clickable" data-serial="4" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19865440"><span class="current-collection-item-serial">4.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux实操--组管理、权限管理和定时任务">实操--组管理、权限管理和定时任务</span><time class="current-collection-publish-date" title="2026年04月14日 14:40" datetime="2026-04-14 14:40">04-14</time></a><a class="current-collection-item current-collection-link clickable" data-serial="5" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19869216"><span class="current-collection-item-serial">5.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux实操--磁盘分区挂载与网络配置">实操--磁盘分区挂载与网络配置</span><time class="current-collection-publish-date" title="2026年04月15日 09:34" datetime="2026-04-15 09:34">04-15</time></a><a class="current-collection-item current-collection-link clickable" data-serial="6" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19873308"><span class="current-collection-item-serial">6.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux实操--进程管理与服务管理">实操--进程管理与服务管理</span><time class="current-collection-publish-date" title="2026年04月15日 18:00" datetime="2026-04-15 18:00">04-15</time></a><a class="current-collection-item current-collection-link clickable" data-serial="7" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19878707"><span class="current-collection-item-serial">7.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux实操--rpm与yum">实操--rpm与yum</span><time class="current-collection-publish-date" title="2026年04月16日 16:27" datetime="2026-04-16 16:27">04-16</time></a><a class="current-collection-item current-collection-link clickable" data-serial="8" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19893582"><span class="current-collection-item-serial">8.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux--Shell编程入门">--Shell编程入门</span><time class="current-collection-publish-date" title="2026年04月20日 10:39" datetime="2026-04-20 10:39">04-20</time></a><a class="current-collection-item current-collection-link clickable" data-serial="9" aria-roledescription="listitem" href="https://www.cnblogs.com/alineverstop/p/19894851"><span class="current-collection-item-serial">9.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux--使用Ubuntu">--使用Ubuntu</span><time class="current-collection-publish-date" title="2026年04月20日 14:24" datetime="2026-04-20 14:24">04-20</time></a><div class="current-collection-item current" data-serial="10" aria-roledescription="listitem"><span class="current-collection-item-serial">10.</span><span class="current-collection-item-title-prefix">Linux</span><span class="current-collection-item-title no-shrink" title="Linux进阶--日志管理">进阶--日志管理</span><time class="current-collection-publish-date" title="2026年04月21日 09:38" datetime="2026-04-21 09:38">04-21</time></div></div><div class="current-collection-footer current-collection-collapse-button-wrapper"><div class="current-collection-collapse-button clickable"><span>收起</span><div class="current-collection-arrow icon-arrow"></div></div></div></div>
+<h1 id="日志管理">日志管理<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h1>
+<h2 id="linux日志介绍">Linux日志介绍<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p>日志文件是重要的系统信息文件，其中记录了许多重要的系统事件，包括用户的登录信息，系统的启动信息，系统的安全信息、邮件相关信息、各种服务相关信息等。</p>
+<p>日志记录了系统每天发生的各种事情，通过日志来检查错误发生的原因，或者收到攻击时攻击者留下的痕迹。</p>
+<p>总之，日志是用来记录重大事件的工具。</p>
+<h2 id="系统常用日志">系统常用日志<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p>日志存放的目录：/var/log</p>
+<p><img alt="无标题" loading="lazy" data-src="https://img2024.cnblogs.com/blog/3388489/202604/3388489-20260421093649206-2136172853.png" class=" medium-zoom-image lazyloaded" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/3388489-20260421093649206-2136172853.png"></p>
+<h2 id="日志管理服务-rsyslogd">日志管理服务 rsyslogd<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p>CentOS7.6日志服务是rsyslogd,CentOS6.x 日志服务是syslogd。rsyslogd 功能更强大。</p>
+<p>rsyslogd 的使用、日志文件的格式和syslogd服务兼容。</p>
+<p>具体使用方式如下：</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-sh highlighter-hljs hljs language-bash"><span class="hljs-comment"># 查询Linux中的rsyslogd服务是否启动</span>
+ps aux | grep <span class="hljs-string">"rsyslogd"</span> | grep -v <span class="hljs-string">"grep"</span> <span class="hljs-comment"># -v 表示反向匹配，搜索不包含“grep” 的内容</span>
+<span class="hljs-comment"># 查询 rsyslogd服务 的自启动状态</span>
+systemctl list-unit-files | grep rsyslog
+</code></pre>
+<h3 id="配置文件etcrsyslogconf">配置文件：/etc/rsyslog.conf<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>编辑文件时的格式为：<code>*.*</code>   存放日志文件</p>
+<p>第一个* 代表日志类型，第二个*代表日志级别</p>
+<ol>
+<li>日志类型分为：</li>
+</ol>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-sh highlighter-hljs hljs language-bash">auth      <span class="hljs-comment">#pam产生的日志</span>
+authpriv  <span class="hljs-comment">#ssh、ftp等登录信息的验证信息</span>
+cron      <span class="hljs-comment">#时间任务相关</span>
+kern      <span class="hljs-comment">#内核</span>
+lpr       <span class="hljs-comment">#打印</span>
+mail      <span class="hljs-comment">#邮件</span>
+mark(syslog)-rsyslog   <span class="hljs-comment">#服务内部的信息，事件标识</span>
+news      <span class="hljs-comment">#新闻组</span>
+user      <span class="hljs-comment">#用户程序产生的相关信息</span>
+uucp      <span class="hljs-comment">#unix to unix copy主机之间相关的通信</span>
+<span class="hljs-built_in">local</span> 1-7 <span class="hljs-comment"># 自定义的日志设备</span>
+</code></pre>
+<p>日志级别分为：</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-sh highlighter-hljs hljs language-bash">debug     <span class="hljs-comment"># 调试信息、日志通信最多</span>
+info      <span class="hljs-comment"># 一般信息日志，最常用</span>
+notice    <span class="hljs-comment"># 最具有重要性的普通条件的信息</span>
+warning   <span class="hljs-comment"># 警告级别</span>
+err       <span class="hljs-comment"># 错误级别，阻止某个功能或者模块不能正常工作的信息</span>
+crit      <span class="hljs-comment"># 严重级别，阻止整个系统或者整个软件不能正常工作的信息</span>
+alert     <span class="hljs-comment">#需要立刻修改的信息</span>
+emerg     <span class="hljs-comment">#内核崩溃等重要信息</span>
+none      <span class="hljs-comment">#什么都不记录</span>
+</code></pre>
+<p>注意：从上到下，级别由低到高，记录信息越来越少！</p>
+<p>比如，/etc/rsyslog.conf文件的部分内容如下：</p>
+<p><img alt="无2标题" loading="lazy" data-src="https://img2024.cnblogs.com/blog/3388489/202604/3388489-20260421093704065-1249065454.png" class=" lazyloaded" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/3388489-20260421093704065-1249065454.png"></p>
+<p>由rsyslogd 记录的日志文件，包含以下4列信息：</p>
+<ul>
+<li>事件发生时间</li>
+<li>发生事件的服务器主机名</li>
+<li>发生事件的服务名或程序名</li>
+<li>事件的具体信息</li>
+</ul>
+<p>比如查看/var/log/secure 日志，这个日志记录用户验证和授权方面的信息。</p>
+<h4 id="日志管理服务的具体应用">日志管理服务的具体应用<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h4>
+<p>在/etc/rsyslog.conf 中添加一个日志文件/var/log/ali.log ，当有事件发送时（比如sshd服务相关事件），该文件会接收到信息并保持：</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-sh highlighter-hljs hljs language-bash"><span class="hljs-comment"># 给 /etc/rsyslog.conf 的最后一行添加</span>
+*.*                             /var/log/ali.log
+</code></pre>
+<p>此时就配置完成了</p>
+<h2 id="日志轮替">日志轮替<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p>日志轮替就是把旧的日志文件移动并改名，同时建立新的空日志文件，当旧日志文件超出保存期限后，就会进行删除。</p>
+<ul>
+<li>日志轮替文件命名</li>
+</ul>
+<p>centos7 使用logrotate 进行日志轮替管理，要想改变日志轮替文件名字，通过/etc/logrotate.conf配置文件中得“dateext”参数。</p>
+<p>如果配置文件中有“dateext”参数，日志会使用日期来作为日志文件得后缀，例如："secure-20211103"。这样日志文件名不会重复，也就不需要日志文件得改名，只需要指定保存日志得个数，删除多余得日志文件即可。</p>
+<p>如果配置文件中没有“dateext”参数，日志文件就需要改名了。当第一次进行日志轮替时，当前得“secure”会自动改为“secure.1”,然后新建“secure”日志，用来保存新日志。当第二次进行日志轮替时，“secure.1”会改为“secure.2”，当前得“secure”会自动改为“secure.1”，然后新建“secure”日志文件，用来保存新得日志。以此类推。</p>
+<ul>
+<li>logrotate 配置文件</li>
+</ul>
+<p>/etc/logrotate.conf 是 logrotate 的全局配置文件</p>
+<p>具体内容如下：</p>
+<p><img alt="无3标题" loading="lazy" data-src="https://img2024.cnblogs.com/blog/3388489/202604/3388489-20260421093715463-397739387.png" class="lazyload"></p>
+<ul>
+<li>logrotate 配置文件参数说明</li>
+</ul>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-sh highlighter-hljs hljs language-bash">daily <span class="hljs-comment"># 轮替周期是日</span>
+weekly <span class="hljs-comment">#轮替周期是周</span>
+monthly <span class="hljs-comment">#轮替周期是月</span>
+rotate 数字 <span class="hljs-comment">#保留得日志文件个数。0表示没有备份</span>
+compress <span class="hljs-comment">#日志轮替时，旧得日志进行压缩</span>
+create mode owner group <span class="hljs-comment">#建立新日志，同时指定新日志权限与所有者和所属组</span>
+mail address <span class="hljs-comment">#当日志轮替时，输出内容通过邮件发送到指定得邮件地址</span>
+missingok <span class="hljs-comment">#如果日志不存在，则忽略该日志得警告信息</span>
+notifempty <span class="hljs-comment">#如果日志为空文件，则不进行轮替</span>
+minsize 大小 <span class="hljs-comment"># 日志轮替得最小值。日志一定要达到这个最小值才会进行轮替，否则就算到达时间也不轮替</span>
+size 大小 <span class="hljs-comment">#日志只有大于指定大小才进行日志轮替，而不是按照时间轮替</span>
+dateext <span class="hljs-comment">#使用日期作为日志轮替文件得后缀</span>
+sharedscripts <span class="hljs-comment">#在此关键字之后得脚本只执行一次</span>
+prerotate/endscript <span class="hljs-comment">#在日志轮替之前执行脚本</span>
+postrotate/endscript <span class="hljs-comment">#在日志轮替之后执行脚本</span>
+</code></pre>
+<ul>
+<li>把自己的日志加入日志轮替</li>
+</ul>
+<p>第一种方法：直接在/etc/logrotate.conf 配置文件中写入该日志的轮替策略。</p>
+<p>第二种方法：在/etc/logrotate.d/目录中新建立该日志的轮替文件，在该轮替文件中写入正确的轮替策略，因为该目录中的文件都会被“include”到主配置文件中，所以也可以把日志加入轮替。</p>
+<p>推荐使用第二种方法，因为系统中轮替的日志非常多，如果全部写入/etc/logrotate.conf ，这个文件就难以维护了。</p>
+<p>/etc/logrotate.d/下的内容如下：</p>
+<p><img alt="无标题4" loading="lazy" data-src="https://img2024.cnblogs.com/blog/3388489/202604/3388489-20260421093727177-1913805664.png" class="lazyload"></p>
+<p>然后在ali.log 中编写内容如下：</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-sh highlighter-hljs hljs language-bash">/var/log/aliSSHD.log  <span class="hljs-comment"># 针对这个日志文件设置轮替规则</span>
+{
+	missingok
+	daily
+	copytruncate
+	rotate 7
+	notifempty
+}
+</code></pre>
+<h3 id="日志轮替原理">日志轮替原理<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>日志轮替之所以可以在指定的时间备份日志，是依赖<strong>系统定时任务</strong>。</p>
+<p>在/etc/cron.daily/ 目录，可以看到有logrotate 文件，系统通过这个定时任务来执行日志轮替。</p>
+<p><img alt="无5标题" loading="lazy" data-src="https://img2024.cnblogs.com/blog/3388489/202604/3388489-20260421093735625-1318826285.png" class="lazyload"></p>
+<h2 id="查看内存日志">查看内存日志<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h2>
+<p>journalctl 可以查看内存日志，常用指令如下：</p>
+<pre class="highlighter-hljs" highlighted="true"><code class="language-sh highlighter-hljs hljs language-bash">journalctl     <span class="hljs-comment"># 查看全部</span>
+journalctl -n 3   <span class="hljs-comment"># 查看最新3条日志</span>
+journalctl --since 19:00 --until 19:10:10 <span class="hljs-comment"># 查看这个时间段内的日志，可以在参数加上日期</span>
+journalctl -p err  <span class="hljs-comment">#报错日志</span>
+journalctl -o verbose <span class="hljs-comment">#日志详细内容</span>
+journalctl _PID=1245 _COMM=sshd  <span class="hljs-comment">#查看包含这些参数的日志</span>
+journalctl | grep sshd
+<span class="hljs-comment"># 案例：查看用户登录日志</span>
+journalctl | grep sshd
+</code></pre>
+<p><strong>注意：journalctl 查看的是内存日志，重启系统后会被清空</strong></p>
+
+
+</div>
+<div id="MySignature" role="contentinfo">
+    <p>本文来自博客园，作者：<a href="https://www.cnblogs.com/alineverstop/" target="_blank">NE_STOP</a>，转载请注明原文链接：<a href="https://www.cnblogs.com/alineverstop/p/19898832" target="_blank">https://www.cnblogs.com/alineverstop/p/19898832</a></p>
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block" role="contentinfo" class="post-meta-container"><div id="BlogCollection" class="post-meta-item post-meta-collections">
+    合集: 
+            <a href="https://www.cnblogs.com/alineverstop/collections/39009" target="_blank">Linux</a>
+        <script>window.collectionManager.init(39009, 'Linux', 19898832, 'SimpleBlue');</script>
+</div>
+<div id="BlogPostCategory" class="post-meta-item detail-post-categories post-meata-categories">
+    分类: 
+            <a href="https://www.cnblogs.com/alineverstop/category/2501842.html" target="_blank">操作系统</a></div>
+<div id="EntryTag" class="post-meta-item detail-post-tags">
+    <div class="post-meta-tags">
+        标签: 
+                <a href="https://www.cnblogs.com/alineverstop/tag/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统</a>    </div>
+    <div class="post-meta-item post-meta-disclaimer">
+        免责声明：本内容来自平台创作者，博客园系信息发布平台，仅提供信息存储空间服务。
+    </div>
+</div>
+
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(19898832,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;b512dcee-4203-40e0-a025-08dc2304140e&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_wechat" href="javascript:void(0);" onclick="shareManager.wechatShare()">微信分享</a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/alineverstop/" target="_blank"><img src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/20240203133743.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info post-detail-profile">
+            <a href="https://home.cnblogs.com/u/alineverstop/">NE_STOP</a>
+            <br>
+            <a href="https://home.cnblogs.com/u/alineverstop/followers/">粉丝 - <span class="follower-count">10</span></a>
+            <a href="https://home.cnblogs.com/u/alineverstop/followees/">关注 - <span class="following-count">1</span></a><br>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow" class="follow-tip">
+                <a href="javascript:void(0);" onclick="follow(&#39;b512dcee-4203-40e0-a025-08dc2304140e&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(19898832,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(19898832,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+        <div id="vip_tip"><a class="tip" href="https://cnblogs.vip/" target="_blank">升级成为会员</a></div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script>
+</div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/alineverstop/p/19894851" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/alineverstop/p/19894851" data-featured-image="" title="发布于 2026-04-20 14:24">Linux--使用Ubuntu</a>
+
+</div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date" data-last-update-days="0.003472222222222222" data-date-updated="2026-04-21 09:43">2026-04-21 09:38</span>&nbsp;
+<a href="https://www.cnblogs.com/alineverstop">NE_STOP</a>&nbsp;
+阅读(<span id="post_view_count">19</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(19898832);return false;">收藏</a>&nbsp;
+<a href="https://report.cnblogs.com/?targetLink=https%3A%2F%2Fwww.cnblogs.com%2Falineverstop%2Fp%2F19898832&amp;targetId=19898832&amp;targetType=0" target="_blank">举报</a>
+</div>
+        </div>
+        <script>
+    var cb_entryId = 19898832, cb_entryCreatedDate = '2026-04-21 09:38', cb_postType = 1, cb_postTitle = 'Linux进阶--日志管理';
+    var allowComments = true, cb_blogId = 816429, cb_blogApp = 'alineverstop', cb_blogUserGuid = 'b512dcee-4203-40e0-a025-08dc2304140e';
+    mermaidRender.render()
+    markdown_highlight()
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");    
+</script>
+        <a id="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav">
+        <div class="comment-nav-right">
+            <span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/alineverstop/p/19898832#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/alineverstop/p/19898832#top">返回顶部</a>
+        </div>
+    </div>
+    <div id="comment_form_container"><script type="text/javascript" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/mention.min.js.下载"></script>
+<div id="commentform_title">
+    <label>发表评论</label>
+        <a href="https://cnblogs.vip/" target="_blank" style="margin-left:20px">升级成为园子VIP会员</a>
+</div>
+<span id="tip_comment" style="color:Red"></span>
+<div class="commentbox_main comment_textarea">
+    <div class="commentbox_title">
+        <div class="commentbox_title_left">
+            <span id="btn_edit_comment" class="commentbox_tab active" title="编辑评论">编辑</span>
+            <span id="btn_preview_comment" class="commentbox_tab" title="Markdown 预览">预览</span>
+        </div>
+        <div class="commentbox_title_right">
+            <span id="ubb_bold" class="comment_icon" alt="粗体" title="添加粗体(Ctrl + B)">
+                <svg class="comment_svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <path d="m13.221 19c1.4414 0 2.5793-0.27451 3.3759-0.82353 0.92931-0.66667 1.4034-1.7059 1.4034-3.1176 0-0.94118-0.22759-1.7059-0.66379-2.2549-0.45517-0.56863-1.119-0.94118-2.0103-1.1176 0.68276-0.27451 1.1948-0.64706 1.5552-1.1569 0.36034-0.54902 0.55-1.2157 0.55-2 0-1.0588-0.36034-1.902-1.0621-2.5294-0.75862-0.66667-1.8207-1-3.1672-1h-6.2017v14h6.2207zm-0.82196-8h-3.3987v-4h3.4367c0.91139 0 1.557 0.15686 1.9747 0.47059 0.37975 0.29412 0.58861 0.78431 0.58861 1.451 0 0.72549-0.20886 1.2549-0.58861 1.5882-0.39873 0.31373-1.0633 0.4902-2.0127 0.4902zm0.52612 6h-3.9249v-4h3.9855c1.052 0 1.8208 0.16216 2.3064 0.48649 0.46532 0.32432 0.70809 0.84685 0.70809 1.5856 0 0.72072-0.3237 1.2252-0.9711 1.5495-0.50578 0.25225-1.2139 0.37838-2.104 0.37838z" fill-rule="nonzero" stroke-width=".35"></path>
+                    </g>
+                </svg>
+            </span>
+            <span id="ubb_url" class="comment_icon" title="添加链接(Ctrl + K)" alt="链接">
+                <svg class="comment_svg comment_svg_stroke" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <g transform="translate(4 4)" fill-rule="nonzero" stroke-width=".4">
+                            <path d="m6.304 9.696c-0.288-0.288-0.512-0.608-0.704-0.992-0.16-0.32-0.032-0.704 0.288-0.864 0.32-0.16 0.704-0.032 0.864 0.288 0.128 0.224 0.256 0.448 0.448 0.64 0.928 0.928 2.432 0.928 3.36 0l3.36-3.328c0.928-0.928 0.928-2.432 0-3.36s-2.432-0.928-3.36 0l-2.272 2.272c-0.256 0.256-0.64 0.256-0.896 0-0.256-0.256-0.256-0.64 0-0.896l2.272-2.272c1.44-1.44 3.744-1.44 5.184 0 1.44 1.44 1.44 3.744 0 5.184l-3.36 3.296c-0.704 0.704-1.632 1.088-2.592 1.088-0.928 0-1.856-0.352-2.592-1.056z"></path>
+                            <path d="m3.776 15.808c-0.992 0-1.888-0.384-2.592-1.056-1.44-1.44-1.44-3.744 0-5.184l3.328-3.328c1.44-1.44 3.744-1.44 5.184 0 0.288 0.288 0.544 0.64 0.736 1.024 0.16 0.32 0 0.704-0.32 0.864-0.32 0.16-0.704 0-0.864-0.32-0.128-0.256-0.288-0.48-0.48-0.672-0.928-0.928-2.432-0.928-3.36 0l-3.296 3.328c-0.928 0.928-0.928 2.432 0 3.36 0.448 0.448 1.056 0.704 1.664 0.704 0.608 0 1.248-0.256 1.664-0.704l2.112-2.112c0.256-0.256 0.64-0.256 0.896 0s0.256 0.64 0 0.896l-2.112 2.112c-0.672 0.704-1.568 1.088-2.56 1.088z"></path>
+                        </g>
+                    </g>
+                </svg>
+            </span>
+            <span id="ubb_code" class="comment_icon" title="添加代码(Ctrl + `)" alt="代码">
+                <svg class="comment_svg comment_svg_stroke" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <g transform="translate(16 6)" stroke-linecap="round" stroke-width="2">
+                            <line x1=".5" x2="4.5" y1=".7" y2="6.3"></line>
+                            <line transform="translate(2.5 9.1) scale(1 -1) translate(-2.5 -9.1)" x1=".5" x2="4.5" y1="6.3" y2="11.9"></line>
+                        </g>
+                        <g transform="translate(3 6.1)" stroke-linecap="round" stroke-width="2">
+                            <line transform="translate(2.5 3.5) scale(-1 1) translate(-2.5 -3.5)" x1=".5" x2="4.5" y1=".7" y2="6.3"></line>
+                            <line transform="translate(2.5 9.1) scale(-1) translate(-2.5 -9.1)" x1=".5" x2="4.5" y1="6.3" y2="11.9"></line>
+                        </g>
+                        <path transform="translate(12 12.5) scale(1 -1) translate(-12 -12.5)" d="m10.778 7.1249c0.50008-0.11366 0.9978 0.16911 1.1643 0.64128l0.032406 0.11223 2 8.8c0.1224 0.53855-0.21496 1.0744-0.75351 1.1968-0.50008 0.11366-0.9978-0.16911-1.1643-0.64128l-0.032406-0.11223-2-8.8c-0.1224-0.53855 0.21496-1.0744 0.75351-1.1968z" fill-rule="nonzero" stroke-width=".25"></path>
+                    </g>
+                </svg>
+            </span>
+            <span id="ubb_quote" class="comment_icon" title="添加引用(Ctrl + Q)" alt="引用">
+                <svg class="comment_svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <g transform="translate(5 4)" fill-rule="nonzero" stroke-width=".25">
+                            <path d="m5.0013 15v-5.2702h-2.8008c-0.13413-3.3762 1.2004-6.2143 4.0009-8.5135l-1.2-1.2163c-3.335 2.2996-5.0013 5.8119-5.0013 10.54v4.4595h5.0013-1.285e-5zm8.7987 0v-5.2702h-2.8008c-0.13453-3.3762 1.2-6.2143 4.0009-8.5135l-1.2-1.2163c-3.335 2.2996-5.0013 5.8119-5.0013 10.54v4.4595h5.0013-1.28e-5z"></path>
+                        </g>
+                    </g>
+                </svg>
+            </span>
+            <span id="ubb_img" class="comment_icon" alt="图片" title="上传图片(Ctrl + I)">
+                <svg class="comment_svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <g transform="translate(3 3.8)" fill-rule="nonzero">
+                            <path d="m14.1 0.58235h-11.2c-1.32 0-2.4 1.0482-2.4 2.3294v10.871c0 1.2812 1.08 2.3294 2.4 2.3294h11.2c1.32 0 2.4-1.0482 2.4-2.3294v-10.871c0-1.2812-1.08-2.3294-2.4-2.3294zm0.7 13.569-3.63-3.4165 1.33-1.2909c0.21-0.20382 0.59-0.20382 0.8 0l1.6 1.5529v2.7856c0 0.13588-0.04 0.26206-0.1 0.36882zm-11.9-12.016h11.2c0.44 0 0.8 0.34941 0.8 0.77647v5.8915l-0.47-0.45618c-0.84-0.825-2.22-0.825-3.07 0l-1.35 1.3103-2.39-2.2421c-0.85-0.825-2.22-0.825-3.05-0.019412l-2.48 2.2615v-6.7456c0.01-0.42706 0.37-0.77647 0.81-0.77647zm-0.8 11.647v-1.9897l3.6-3.2806c0.21-0.20382 0.58-0.21353 0.81 0.0097059l6.43 6.0371h-10.04c-0.44 0-0.8-0.33971-0.8-0.77647z"></path>
+                            <ellipse cx="10.5" cy="6.4059" rx="1" ry="1"></ellipse>
+                        </g>
+                    </g>
+                </svg>
+            </span>
+        </div>
+    </div>
+    <div style="display:none">
+        <span id="comment_edit_id"></span>
+        <span id="span_parentcomment_id"></span>
+        <span id="span_parent_id"></span>
+        <span id="span_comment_replyto"></span>
+        <span id="span_comment_posted"></span>
+        <span id="span_current_user_id">74fa9dbf-bf5f-42ce-f052-08d95a4b5cdb</span>
+    </div>
+    <textarea id="tbCommentBody" placeholder="支持 Markdown"></textarea>
+    <div id="tbCommentBodyPreview" class="feedbackCon" style="display: none">
+        <div id="tbCommentBodyPreviewBody" class="blog_comment_body comment_preview cnblogs-markdown"></div>
+    </div>
+    <div class="commentbox_footer">
+        <span>&nbsp;</span>
+        <span href="javascript:void(0)" id="ubb_auto_completion" class="comment_option">
+            <svg style="display: none" id="comment_auto_completion_on" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"><path d="M406.724 908.504c-89.02 0-157.885-32.319-206.594-96.957-49.549-64.639-73.903-155.795-73.903-274.299 0-116.017 24.354-206.345 73.903-270.155 48.71-63.81 117.574-95.3 206.594-95.3h19.316l-7.559 72.925h-3.359c-65.505 0-115.054 25.69-150.326 77.069-35.272 50.55-52.908 122.647-52.908 215.461 0 94.472 17.636 168.226 52.908 220.434 35.272 51.379 84.82 77.897 150.326 77.897h3.36l7.558 72.925h-19.316zm266.548 0c89.02 0 157.885-32.319 206.594-96.957 49.55-64.639 73.904-155.795 73.904-274.299 0-116.017-24.355-206.345-73.904-270.155-48.709-63.81-117.573-95.3-206.594-95.3h-19.315l7.558 72.925h3.36c65.505 0 115.054 25.69 150.326 77.069 35.272 50.55 52.908 122.647 52.908 215.461 0 94.472-17.636 168.226-52.908 220.434-35.272 51.379-84.821 77.897-150.327 77.897h-3.359l-7.558 72.925h19.315zm-94.068-65.897c0 31.514.854 54.433 1.708 68.758 1.709 14.325 3.417 25.784 6.835 34.38 2.563 8.594 6.834 14.324 12.814 20.054 5.126 5.73 14.523 11.46 27.337 17.189v34.38H451.914v-34.38c17.086-7.162 29.046-15.757 35.026-24.352 5.126-10.027 9.398-22.92 11.106-38.676 1.709-17.19 2.563-42.974 2.563-77.353V238.109c0-32.947-.854-55.866-1.709-71.623-1.708-14.325-4.271-25.784-6.834-32.947-3.417-8.595-7.689-15.757-12.814-20.054-5.126-5.73-14.523-10.027-27.338-17.19V61.916h175.984v34.38c-11.96 5.73-21.357 11.459-26.483 15.756-5.125 5.73-9.397 11.46-12.814 20.055-3.417 7.162-5.98 18.622-6.834 34.379-1.709 15.757-2.563 38.676-2.563 71.623v604.498z" fill-rule="nonzero"></path></svg>
+            <svg id="comment_auto_completion_off" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"><path d="M242.96 223.172l59.627 58.009c-14.277 10.773-26.874 24.032-37.791 40.606-35.272 50.55-52.908 122.647-52.908 215.461 0 94.472 17.636 168.226 52.908 220.434 35.272 51.379 84.82 77.897 150.326 77.897h3.36l7.558 72.925h-19.316c-89.02 0-157.885-32.319-206.594-96.957-49.549-64.639-73.903-155.795-73.903-274.299 0-116.017 24.354-206.345 73.903-270.155 12.597-16.574 26.874-31.49 42.83-43.921zm36.952-23.204c36.112-19.06 78.943-28.175 126.812-28.175h19.316l-7.559 72.925h-3.359c-27.714 0-52.908 4.144-74.743 14.088l-60.467-58.838zM805.123 770.94l60.466 58.01c-47.869 53.036-111.695 79.554-192.317 79.554h-19.315l7.558-72.925h3.36c59.626 0 105.816-21.546 140.248-64.638zm23.515-37.29c26.034-49.723 39.47-115.19 39.47-196.402 0-92.814-17.635-164.91-52.907-215.461-35.272-51.38-84.821-77.069-150.327-77.069h-3.359l-7.558-72.925h19.315c89.02 0 157.885 31.49 206.594 95.3 49.55 63.81 73.904 154.138 73.904 270.155 0 108.56-20.996 194.744-62.146 257.725l-62.986-61.324zM500.609 474.465l78.595 75.92v292.222c0 31.514.854 54.433 1.708 68.758 1.709 14.325 3.417 25.784 6.835 34.38 2.563 8.594 6.834 14.324 12.814 20.054 5.126 5.73 14.523 11.46 27.337 17.189v34.38H451.914v-34.38c17.086-7.162 29.046-15.757 35.026-24.352 5.126-10.027 9.398-22.92 11.106-38.676 1.709-17.19 2.563-42.974 2.563-77.353V474.465zm0-60.164V238.11c0-32.947-.854-55.866-1.709-71.623-1.708-14.325-4.271-25.784-6.834-32.947-3.417-8.595-7.689-15.757-12.814-20.054-5.126-5.73-14.523-10.027-27.338-17.19v-34.38h175.984v34.38c-11.96 5.73-21.357 11.459-26.483 15.756-5.125 5.73-9.397 11.46-12.814 20.055-3.417 7.162-5.98 18.622-6.834 34.379-1.709 15.757-2.563 38.676-2.563 71.623v253.545l-78.595-77.353z"></path><path d="M153.103 132.024l805.45 783.706-44.277 45.505-805.45-783.706z"></path></svg>
+            <span class="inline_middle">自动补全</span>
+        </span>
+    </div>
+</div>
+<p id="commentbox_opt">
+    <input id="btn_comment_submit" type="button" class="comment_btn" title="提交评论(Ctrl + Enter)" value="提交评论">
+    <span id="span_comment_canceledit" style="display:none"><a href="javascript:void(0);" onclick="return CancelCommentEdit()">不改了</a></span>
+    <a href="javascript:void(0);" onclick="return account.logout();">退出</a>
+            <a id="commentbox_opt_sub" href="javascript:void(0);" title="订阅后有新评论时会邮件通知您" onclick="commentManager.Subscribe()">订阅评论</a>
+            <a href="https://www.cnblogs.com/my" target="_blank">我的博客</a>
+</p>
+<div id="tip_comment2" style="color:Red"></div>
+<p>[Ctrl+Enter快捷键提交]</p>
+<script>var commentEditor = initCommentEditor("tbCommentBody");</script>
+
+</div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+        <div id="cnblogs_ch"></div>
+    <div id="opt_under_post"></div>
+        <div id="blog_c1" class="under-post-card below-post-card">
+            <a href="https://www.volcengine.com/activity/codingplan?utm_campaign=hw&amp;utm_content=hw&amp;utm_medium=devrel_tool_web&amp;utm_source=OWO&amp;utm_term=cnblogs" rel="nofollow" target="_blank" onclick="countCreativeClicks(&#39;C1-CodingPlan&#39;)">
+                <img src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/35695-20260413213337013-384015842.webp" onload="countCreativeImpressions(&#39;C1-CodingPlan&#39;)" alt="" style="width:300px!important;height:250px!important;min-width:300px!important;max-width:300px!important;">
+                <span id="c1_impression" style="display:none"></span>
+            </a>
+        </div>
+    <div id="under_post_card1"><div class="under-post-card below-post-card">
+<header>编辑推荐：</header>
+<ul>
+    <li><a href="https://www.cnblogs.com/wmyskxz/p/19854791" target="_blank">你能被装进一个文件里吗？——7 万人把同事“蒸馏”成了 AI</a></li>
+    <li><a href="https://www.cnblogs.com/mengxiang2/p/19796426" target="_blank">别再吹牛了，100% Vibe Coding 存在无法自洽的逻辑漏洞！</a></li>
+    <li><a href="https://www.cnblogs.com/guangzan/p/19796050" target="_blank">Pretext：值得关注的文本排版引擎</a></li>
+    <li><a href="https://www.cnblogs.com/wmyskxz/p/19754974" target="_blank">Prompt 焚诀——一个模板，终结你和 AI 的所有沟通问题</a></li>
+    <li><a href="https://www.cnblogs.com/deali/p/19780273" target="_blank">是谁 2026 年还在用 Sublime Text 写代码？</a></li>
+</ul>
+</div></div>
+    <div id="related_posts_card"></div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card below-post-card"></div>
+    <script type="text/javascript">
+        var commentManager = new blogCommentManager();
+        commentManager.renderComments(0);
+        fixPostBody();
+        window.footnoteTipManager.generateFootnoteTips();
+
+            window.tocManager.displayDisableTocTips = false;
+            window.tocManager.generateToc();
+            
+            setTimeout(function() { countViews(cb_blogId, cb_entryId); }, 50);
+            
+            deliverT2();
+            deliverC1C2();
+            loadNewsAndKb();
+            
+            LoadPostCategoriesTags(cb_blogId, cb_entryId);
+            
+            LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+            GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+            loadOptUnderPost();
+            GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+                </script>
+</div>
+
+    </div>
+</div>
+            </div>
+        </div>
+
+        <div id="sideBar">
+            <div id="sideBarMain">
+                <div id="sidebar_news" class="newsItem">
+    
+<h3 class="catListTitle">公告</h3>
+<div id="blog-news" class="sidebar-news">
+    <div id="sidebar_news_container"><div id="profile_block" class="sidebar-profile">
+    昵称：
+    <a href="https://home.cnblogs.com/u/alineverstop/">
+        NE_STOP
+    </a>
+    <br>
+    园龄：
+    <a href="https://home.cnblogs.com/u/alineverstop/" title="入园时间：2024-02-03">
+        2年2个月
+    </a>
+    <br>
+    粉丝：
+    <a class="follower-count" href="https://home.cnblogs.com/u/alineverstop/followers/">
+        10
+    </a>
+    <br>
+    关注：
+    <a class="folowing-count" href="https://home.cnblogs.com/u/alineverstop/followees/">
+        1
+    </a>
+    <div id="p_b_follow" class="follow-tip">
+<a href="javascript:void(0)" onclick="follow(&#39;b512dcee-4203-40e0-a025-08dc2304140e&#39;)">+加关注</a></div>
+    <script>getFollowStatus('b512dcee-4203-40e0-a025-08dc2304140e');</script>
+</div>
+</div>
+</div>
+<script>loadBlogNews();</script>
+</div>
+                <div id="calendar"><div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2026/03/21&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2026年4月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2026/05/21&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    <tr>
+        <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+        <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+        <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+        <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+        <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+        <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+        <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+    </tr>
+            <tr>
+                            <td class="CalOtherMonthDay" align="center">29</td>
+                            <td class="CalOtherMonthDay" align="center">30</td>
+                            <td class="CalOtherMonthDay" align="center">31</td>
+                        <td class="" align="center">
+                            1
+                        </td>
+                        <td class="" align="center">
+                            2
+                        </td>
+                        <td class="" align="center">
+                            <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04/03"><u>3</u></a>
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        4
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            5
+                        </td>
+                            <td class="" align="center">
+                                6
+                            </td>
+                            <td class="" align="center">
+                                <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04/07"><u>7</u></a>
+                            </td>
+                            <td class="" align="center">
+                                8
+                            </td>
+                            <td class="" align="center">
+                                9
+                            </td>
+                            <td class="" align="center">
+                                <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04/10"><u>10</u></a>
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            11
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            12
+                        </td>
+                            <td class="" align="center">
+                                <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04/13"><u>13</u></a>
+                            </td>
+                            <td class="" align="center">
+                                <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04/14"><u>14</u></a>
+                            </td>
+                            <td class="" align="center">
+                                <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04/15"><u>15</u></a>
+                            </td>
+                            <td class="" align="center">
+                                <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04/16"><u>16</u></a>
+                            </td>
+                            <td class="" align="center">
+                                17
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            18
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            19
+                        </td>
+                            <td class="" align="center">
+                                <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04/20"><u>20</u></a>
+                            </td>
+                            <td class="CalTodayDay cal-today" align="center">
+                                21
+                            </td>
+                            <td class="" align="center">
+                                22
+                            </td>
+                            <td class="" align="center">
+                                23
+                            </td>
+                            <td class="" align="center">
+                                24
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            25
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            26
+                        </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                            <td class="" align="center">
+                                28
+                            </td>
+                            <td class="" align="center">
+                                29
+                            </td>
+                            <td class="" align="center">
+                                30
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                1
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            2
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            3
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                5
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                6
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                7
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                8
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            9
+                        </td>
+                </tr>
+    </tbody>
+</table></div></div>                
+                <script>loadBlogDefaultCalendar();</script>
+                <div id="leftcontentcontainer">
+                    <!-- begin:SingleColumn -->
+                    <div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+    <div class="mySearch my-search">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<div id="sidebar_shortcut" class="sidebar-block">
+    
+<h3 class="catListTitle">
+常用链接
+</h3>
+<ul>
+    <li><a href="https://www.cnblogs.com/alineverstop/p/" title="我的博客的随笔列表">我的随笔</a></li>
+<li><a href="https://www.cnblogs.com/alineverstop/MyComments.html" title="我的发表过的评论列表" rel="nofollow">我的评论</a></li>
+<li><a href="https://www.cnblogs.com/alineverstop/OtherPosts.html" title="我评论过的随笔列表" rel="nofollow">我的参与</a></li>
+<li><a href="https://www.cnblogs.com/alineverstop/comments" title="我的博客的评论列表" rel="nofollow">最新评论</a></li>
+<li><a href="https://www.cnblogs.com/alineverstop/tag/" title="我的博客的标签列表">我的标签</a></li>
+
+</ul>
+
+</div>
+
+
+
+<div id="sidebar_toptags" class="sidebar-block">
+    <div class="catListTag">
+    <h3 class="catListTitle"><a href="https://www.cnblogs.com/alineverstop/tag/" class="sidebar-card-title-a">我的标签</a></h3>
+    <ul>
+                <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/java/">java<span class="tag-count">(53)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/spring/">spring<span class="tag-count">(29)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/.net/">.net<span class="tag-count">(13)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/">操作系统<span class="tag-count">(9)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="tag-count">(5)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/winform/">winform<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/javascript/">javascript<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/%E5%B0%8F%E7%A8%8B%E5%BA%8F/">小程序<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/alineverstop/tag/%E7%A8%8B%E5%BA%8F%E4%BA%BA%E7%94%9F/">程序人生<span class="tag-count">(1)</span></a>
+        </li>
+    
+
+    </ul>
+</div>
+
+</div>
+
+
+
+<div id="sidebar_categories">
+
+    <div class="catList">
+        <h3 class="catListTitle">
+            
+合集
+
+
+        </h3>
+        <ul>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/collections/29658" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="nofollow noopener noreferrer" target="">Spring Boot 企业级应用系列(8)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/collections/37243" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="nofollow noopener noreferrer" target="">shiro从入门到精通(9)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/collections/37487" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="nofollow noopener noreferrer" target="">SpringBoot3(6)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/collections/37709" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="nofollow noopener noreferrer" target="">spring6(7)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/collections/38088" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="nofollow noopener noreferrer" target="">springMVC(5)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/collections/38195" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="nofollow noopener noreferrer" target="">MyBatis(9)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/collections/38553" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="nofollow noopener noreferrer" target="">SpringCloud(10)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/collections/39009" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="nofollow noopener noreferrer" target="">Linux(10)</a>
+                    
+                </li>
+            
+        </ul>
+    </div>    <div class="catListPostCategory">
+        <h3 class="catListTitle">
+            
+    <a class="sidebar-card-title-a" href="https://www.cnblogs.com/alineverstop/post-categories">随笔分类</a>
+
+
+
+        </h3>
+        <ul>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376973.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">&nbsp;java(90)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376974.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">asp-net(15)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376975.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">c#基础学习精华(3)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376970.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">javascript(4)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376972.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Mysql(2)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376969.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Oracle(17)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376965.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Spring(29)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376977.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">SQLServer(3)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376967.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">Vue(5)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2501842.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">操作系统(10)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2384868.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">高数1(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/category/2376966.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">微信小程序(3)</a>
+                    
+                </li>
+            
+        </ul>
+    </div>    <div class="catListPostArchive">
+        <h3 class="catListTitle">
+            
+随笔档案
+
+
+        </h3>
+        <ul>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2026年4月(13)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2026年3月(16)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2026年2月(12)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2026/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2026年1月(16)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2025/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2025年7月(9)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2024/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2024年3月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2021/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2021年9月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2021/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2021年5月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2021/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2021年4月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2019/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年6月(3)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2019/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年2月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2019/01" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2019年1月(4)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年10月(6)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年9月(4)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年8月(2)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年7月(10)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/06" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年6月(5)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年5月(9)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年4月(14)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年3月(11)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2018/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2018年2月(10)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/12" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年12月(2)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/11" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年11月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/10" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年10月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/09" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年9月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/08" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年8月(2)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/07" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年7月(1)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/05" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年5月(2)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/04" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年4月(17)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="true" style="display: block">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/03" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年3月(4)</a>
+                    
+                </li>
+                <li data-category-list-item-visible="false" style="display: none">
+                    <a href="https://www.cnblogs.com/alineverstop/p/archive/2017/02" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link " rel="" target="">2017年2月(2)</a>
+                    
+                </li>
+            <li><a href="javascript:void(0)" onclick="sideColumnManager.loadMore(this)">更多</a></li>
+        </ul>
+    </div></div>
+
+<div id="sidebar_topviewedposts" class="sidebar-block">
+    
+<div id="topview_posts_wrap">
+    <h3 class="catListTitle">
+        <a href="https://www.cnblogs.com/alineverstop/most-viewed" class="sidebar-card-title-a">
+    阅读排行榜
+</a>
+
+    </h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/19453896">
+                            1. 认识shiro(664)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/18983638">
+                            2. SpringBoot--Profile你用对了吗(648)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/18986983">
+                            3. SpringBoot--学会配置日志(625)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/19537574">
+                            4. spring boot3--自动配置与手动配置(584)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/18995435">
+                            5. SpringBoot--如何创建自己的自动配置(560)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<div id="sidebar_topcommentedposts" class="sidebar-block">
+    <div id="topfeedback_posts_wrap">
+    <h3 class="catListTitle">
+        <a href="https://www.cnblogs.com/alineverstop/most-commented" class="sidebar-card-title-a">评论排行榜</a>
+
+    </h3>
+    <div id="TopFeedbackPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/19659262">
+                            1. MyBatis-mybatis入门与增删改查(2)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/19893582">
+                            2. Linux--Shell编程入门(1)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/19506048">
+                            3. SpringBoot3-外部化配置与aop实现(1)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/alineverstop/p/18983638">
+                            4. SpringBoot--Profile你用对了吗(1)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div>
+</div>
+
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+    
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">
+            <a href="https://www.cnblogs.com/alineverstop/most-liked" class="sidebar-card-title-a">推荐排行榜</a>
+
+        </h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/alineverstop/p/18983638">
+                                1. SpringBoot--Profile你用对了吗(3)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/alineverstop/p/18990999">
+                                2. SpringBoot--自动配置的替换和关闭(2)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/alineverstop/p/19784041">
+                                3. Spring Cloud进阶--分布式权限校验OAuth2(1)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/alineverstop/p/19700806">
+                                4. MyBatis-plus进阶之映射与条件构造器(1)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/alineverstop/p/19659262">
+                                5. MyBatis-mybatis入门与增删改查(1)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div><div id="sidebar_recentcomments" class="sidebar-block">
+    <div id="recent_comments_wrap" class="RecentComment">
+    <h3 class="catListTitle"><a href="https://www.cnblogs.com/alineverstop/comments" class="sidebar-card-title-a">最新评论</a></h3>    
+    <div class="RecentCommentBlock">
+        <ul>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/alineverstop/p/19893582">1. Re:Linux--Shell编程入门</a></li>
+                <li class="recent_comment_body"><p>这玩意搞的是真复杂</p>
+</li>
+                <li class="recent_comment_author">--冰山奇迹</li>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/alineverstop/p/19659262">2. Re:MyBatis-mybatis入门与增删改查</a></li>
+                <li class="recent_comment_body">@阿桔！ 博客园首页是时间排序的...</li>
+                <li class="recent_comment_author">--颖梦</li>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/alineverstop/p/19659262">3. Re:MyBatis-mybatis入门与增删改查</a></li>
+                <li class="recent_comment_body"><p>还是2026年吗 这种没营养的怎么上的首页</p>
+</li>
+                <li class="recent_comment_author">--阿桔！</li>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/alineverstop/p/19506048">4. Re:SpringBoot3-外部化配置与aop实现</a></li>
+                <li class="recent_comment_body"><p>赞</p>
+</li>
+                <li class="recent_comment_author">--WebAssembly</li>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/alineverstop/p/18983638">5. Re:SpringBoot--Profile你用对了吗</a></li>
+                <li class="recent_comment_body"><p>支持一下！</p>
+</li>
+                <li class="recent_comment_author">--hantangblog</li>
+        </ul>
+    </div>
+</div>
+</div></div>
+                    <script>loadBlogSideColumn();</script>
+                    <!-- end:  SingleColumn -->
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <div id="footer">
+        
+<a href="https://www.cnblogs.com/" id="footer_site_link" class="footer-brand">博客园</a>
+<span class="footer-copyright"> &nbsp;©&nbsp; 2004-2026</span>
+<br><span class="footer-icp">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602011771"><img src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/ghs.png">浙公网安备 33010602011771号</a>
+    <a href="https://beian.miit.gov.cn/" target="_blank">浙ICP备2021040463号-3</a>
+</span>
+
+    </div>
+</div>
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8E2WNf1AXE5GolAm9rsxlHCf3iaAymXXmMXebLy7BKYFDU3-u89yKM4c6tFj5tKmtzDwPhYLqpVuxEK6KpIMFOWfkLIfA0b_WOvr8ig0BN9pQI0GzUk86Zsb1AjgxmN4Css2QS5ksr6NeX7WyqS7jk2j8p1M_FAj2h3DQ8qjbLwQ02nut-mdHOGzHMS8hcjamg">
+    <script async="" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/js"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer="" src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/hm.js.下载"></script>
+
+
+<div style="z-index: 998; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: none; flex-direction: column; align-items: center; justify-content: center">
+<div style="background: #fff;padding: 30px; margin: 30px; border-radius: 16px;">
+  <div style="width: 200px; height: 200px; background: rgba(255, 255, 255, 0.8); position: absolute; top: -100px; right: -100px; border-radius: 100px"></div>
+  <div style="text-align: center; font-size: 18px; margin-bottom: 10px;">点击右上角即可分享</div>
+  <img src="./Linux进阶--日志管理 - NE_STOP - 博客园_files/35695-20230906145857937-1471873834.gif" alt="微信分享提示">
+</div>   
+    </div></body><div id="immersive-translate-browser-popup" style="all: initial"><template shadowrootmode="open"><style>/** 基础色阶定义 **/
+:root,
+#mount[data-theme="light"],
+#mount:not([data-theme="dark"]) {
+  /* 中性灰阶（light） */
+  --c-00: #000000;
+  --c-22: #222222;
+  --c-33: #333333;
+  --c-66: #666666;
+  --c-83: #838383;
+  --c-99: #999999;
+  --c-c7: #c7c7c7;
+  --c-cc: #cccccc;
+  --c-e6: #e6e6e6;
+  --c-f5: #f5f5f5;
+  --c-ff: #ffffff;
+  /* 品牌主色阶（light） */
+  --p-main: #ea4c89;
+  --p-hover: #ec5e95;
+  --p-active: #e34a85;
+  --p-special: #ee71a2;
+  --p-disabled: #f4a5c4;
+  --p-text-disabled: #f9c9dc;
+  --p-weak: #fdedf3;
+  /* Surface 层级（light，TC 填充-1） */
+  --s-1: #f3f5f6;
+  --s-1-hover: #f6f8f9;
+  --s-1-active: #edf1f2;
+  --s-1-weak: #fafbfb;
+  /* 输入/边框（light，TC 填充-2） */
+  --input-bg-base: #fafbfc;
+  --input-border: #ecf0f7;
+  --input-border-strong: #e0e0e6;
+  --input-bg-strong: #fafdff;
+}
+
+:root[data-theme="dark"],
+[data-theme="dark"] {
+  /* 中性灰阶（dark） */
+  --c-00: #ffffff;
+  --c-22: #dbdbdb;
+  --c-33: #dbdbdb;
+  --c-66: #b3b3b3;
+  --c-83: #838383;
+  --c-99: #707070;
+  --c-c7: #666666;
+  --c-cc: #5c5c5c;
+  --c-e6: #3b3b3b;
+  --c-f5: #262626;
+  --c-ff: #222222;
+  /* 品牌主色阶（dark） */
+  --p-main: #e23c7c;
+  --p-hover: #ea4c89;
+  --p-active: #d5467d;
+  --p-special: #a93a65;
+  --p-disabled: #7e2f4d;
+  --p-text-disabled: #522335;
+  --p-weak: #26171d;
+  /* Surface 层级（dark，TC 填充-1） */
+  --s-1: #2d2e2f;
+  --s-1-hover: #323434;
+  --s-1-active: #202121;
+  --s-1-weak: #262627;
+  /* 输入/边框（dark，TC 填充-2） */
+  --input-bg-base: #2b2d30;
+  --input-border: #3e434b;
+  --input-border-strong: #43474b;
+  --input-bg-strong: #1f2123;
+}
+
+:root,
+#mount [data-theme] {
+  /* 业务/通用变量引用色阶（全局可见，含 Shadow DOM） */
+  --primary: var(--p-main);
+  --primary-hover: var(--p-hover);
+  --primary-inverse: #fff;
+  --modal-background: var(--s-1);
+  --modal-border: var(--input-border);
+  --modal-text: var(--c-22);
+  --modal-text-secondary: var(--c-66);
+  --modal-error: var(--p-main);
+  --modal-required: #f53f3f;
+  --modal-success: #68cd52;
+  --modal-button-background: var(--p-main);
+  --modal-button-text: var(--c-ff);
+  --modal-input-background: var(--input-bg-base);
+  --modal-check-color: var(--p-main);
+  --background-color: var(--c-ff);
+  --background-light-green: var(--s-1-weak, #f5f7f9);
+  --text-black-2: var(--c-22);
+  --text-gray-2: var(--c-22);
+  --text-gray-6: var(--c-66);
+  --text-gray-9: var(--c-99);
+  --text-gray-c2: var(--c-c7);
+  --switch-background-color: var(--c-c7, hsl(205deg, 16%, 77%));
+  --float-ball-more-button-border-color: var(--c-f5, #f6f6f6);
+  --float-ball-more-button-background-color: var(--c-ff);
+  --float-ball-more-button-hover-color: var(--p-weak);
+  --float-ball-more-button-svg-color: #6c6f73;
+  --service-bg-hover: var(--s-1-hover, #f7faff);
+  --service-bg: var(--s-1-weak, #fafbfb);
+}
+
+#mount {
+  --font-family: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu",
+    "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  /* PC/H5 兼容的字号、间距、圆角、阴影变量 */
+  --f-12: 12px;
+  --f-14: 14px;
+  --f-15: 15px;
+  --f-16: 16px;
+  --f-18: 18px;
+  --f-20: 20px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-18: 18px;
+  --space-24: 24px;
+  --radius-8: 8px;
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --control-height-lg: 44px;
+  --width-28: 28px;
+  --width-24: 24px;
+  --width-20: 20px;
+  --width-18: 18px;
+  --width-16: 16px;
+  --width-label-md: 56px;
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.12);
+
+  /* 常规变量 */
+  --line-height: 1.5;
+  --font-weight: 400;
+  --font-size: 16px;
+  --border-radius: 4px;
+  --border-width: 2px;
+  --outline-width: 3px;
+  --spacing: 16px;
+  --typography-spacing-vertical: 24px;
+  --block-spacing-vertical: calc(var(--spacing) * 2);
+  --block-spacing-horizontal: var(--spacing);
+  --grid-spacing-vertical: 0;
+  --grid-spacing-horizontal: var(--spacing);
+  --form-element-spacing-vertical: 12px;
+  --form-element-spacing-horizontal: 16px;
+  --nav-element-spacing-vertical: 16px;
+  --nav-element-spacing-horizontal: 8px;
+  --nav-link-spacing-vertical: 8px;
+  --nav-link-spacing-horizontal: 8px;
+  --form-label-font-weight: var(--font-weight);
+  --transition: 0.2s ease-in-out;
+  --modal-overlay-backdrop-filter: blur(4px);
+  --switch-color: var(--primary-inverse);
+  --switch-checked-background-color: var(--primary);
+  --icon-xia: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgaWQ9IkZyYW1lIj4KPHBhdGggaWQ9IlZlY3RvciIgZD0iTTguMDAyOTEgOS42Nzk4M0wzLjgzMzM5IDUuNTEyMjFMMy4wMjUzOSA2LjMxOTgzTDguMDAzMjkgMTEuMjk1MUwxMi45NzYyIDYuMzE5ODNMMTIuMTY3OSA1LjUxMjIxTDguMDAyOTEgOS42Nzk4M1oiIGZpbGw9IiM4MzgzODMiLz4KPC9nPgo8L3N2Zz4K");
+  /* 兼容旧变量：主色直接引用品牌主色阶 */
+  --primary: var(--p-main);
+  --primary-hover: var(--p-hover);
+  --primary-inverse: #fff;
+  /* Modal 业务变量引用色阶 */
+  --modal-background: var(--s-1);
+  --modal-border: var(--input-border);
+  --modal-text: var(--c-22);
+  --modal-text-secondary: var(--c-66);
+  --modal-error: var(--p-main);
+  --modal-required: #f53f3f;
+  --modal-success: #68cd52;
+  --modal-button-background: var(--p-main);
+  --modal-button-text: var(--c-ff);
+  --modal-input-background: var(--input-bg-base);
+  --modal-check-color: var(--p-main);
+  --background-color: var(--c-ff);
+  --background-light-green: var(--s-1-weak, #f5f7f9);
+  --text-black-2: var(--c-22);
+  --text-gray-2: var(--c-22);
+  --text-gray-6: var(--c-66);
+  --text-gray-9: var(--c-99);
+  --text-gray-c2: var(--c-c7);
+  --switch-background-color: var(--c-c7, hsl(205deg, 16%, 77%));
+  --float-ball-more-button-border-color: var(--c-f5, #f6f6f6);
+  --float-ball-more-button-background-color: var(--c-ff);
+  --float-ball-more-button-hover-color: var(--p-weak);
+  --float-ball-more-button-svg-color: #6c6f73;
+  --service-bg-hover: var(--s-1-hover, #f7faff);
+  --service-bg: var(--s-1-weak, #fafbfb);
+  line-height: var(--line-height);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+}
+
+@media (max-width: 480px) {
+  :root,
+  #mount {
+    --f-12: 10px;
+    --f-14: 12px;
+    --f-15: 13px;
+    --f-16: 14px;
+    --f-18: 16px;
+    --f-20: 18px;
+    --space-4: 4px;
+    --space-6: 4px;
+    --space-8: 6px;
+    --space-12: 8px;
+    --space-16: 12px;
+    --space-18: 14px;
+    --space-24: 18px;
+    --radius-8: 6px;
+    --radius-12: 10px;
+    --radius-16: 12px;
+    --control-height-lg: 38px;
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.1);
+    --width-28: 24px;
+    --width-24: 20px;
+    --width-20: 16px;
+    --width-18: 14px;
+    --width-16: 12px;
+    --width-label-md: 52px;
+  }
+}
+
+#mount * {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:where(#mount) a,
+:where(#mount) [role="link"] {
+  --color: var(--primary);
+  --background-color: transparent;
+  outline: none;
+  background-color: var(--background-color);
+  color: var(--color);
+  -webkit-text-decoration: var(--text-decoration);
+  text-decoration: var(--text-decoration);
+  transition: background-color var(--transition), color var(--transition),
+    box-shadow var(--transition), -webkit-text-decoration var(--transition);
+  transition: background-color var(--transition), color var(--transition),
+    text-decoration var(--transition), box-shadow var(--transition);
+  transition: background-color var(--transition), color var(--transition),
+    text-decoration var(--transition), box-shadow var(--transition),
+    -webkit-text-decoration var(--transition);
+}
+:where(#mount) a:is([aria-current], :hover, :active, :focus),
+:where(#mount) [role="link"]:is([aria-current], :hover, :active, :focus) {
+  --color: var(--primary-hover);
+  --text-decoration: underline;
+}
+
+:where(#mount) label {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--text-gray-2, #222222);
+}
+
+:where(#mount) button {
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.3;
+  min-height: 44px;
+  border-radius: 12px;
+  padding: 0 14px;
+  border: none;
+  background-color: var(--primary, #ea4c89);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+:where(#mount) button:hover {
+  background-color: var(--primary-hover, #f082ac);
+}
+
+:where(#mount) button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+:where(#mount) select,
+:where(#mount) input,
+:where(#mount) textarea {
+  font-family: inherit;
+  color: var(--text-gray-2, #222222);
+}
+
+:where(#mount) select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-family: inherit;
+  color: var(--text-gray-2, inherit);
+  font-size: 13px;
+  line-height: 1.3;
+  outline: none;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--popup-item-background-color, transparent);
+  background-image: var(--icon-xia, none);
+  background-repeat: no-repeat;
+  background-position: center right 12px;
+  background-size: 16px auto;
+  cursor: pointer;
+}
+
+:where(#mount) input[type="checkbox"] {
+  accent-color: var(--primary, #ea4c89);
+}
+
+[type="checkbox"],
+[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 1.25em;
+  height: 1.25em;
+  margin-top: -0.125em;
+  margin-right: 0.375em;
+  margin-left: 0;
+  -webkit-margin-start: 0;
+  margin-inline-start: 0;
+  -webkit-margin-end: 0.375em;
+  margin-inline-end: 0.375em;
+  border-width: var(--border-width);
+  font-size: inherit;
+  vertical-align: middle;
+  cursor: pointer;
+}
+[type="checkbox"]::-ms-check,
+[type="radio"]::-ms-check {
+  display: none;
+}
+[type="checkbox"]:checked,
+[type="checkbox"]:checked:active,
+[type="checkbox"]:checked:focus,
+[type="radio"]:checked,
+[type="radio"]:checked:active,
+[type="radio"]:checked:focus {
+  --background-color: var(--primary);
+  --border-color: var(--primary);
+  background-image: var(--icon-checkbox);
+  background-position: center;
+  background-size: 0.75em auto;
+  background-repeat: no-repeat;
+}
+[type="checkbox"] ~ label,
+[type="radio"] ~ label {
+  display: inline-block;
+  margin-right: 0.375em;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+[type="checkbox"]:indeterminate {
+  --background-color: var(--primary);
+  --border-color: var(--primary);
+  background-image: var(--icon-minus);
+  background-position: center;
+  background-size: 0.75em auto;
+  background-repeat: no-repeat;
+}
+
+[type="radio"] {
+  border-radius: 50%;
+}
+[type="radio"]:checked,
+[type="radio"]:checked:active,
+[type="radio"]:checked:focus {
+  --background-color: var(--primary-inverse);
+  border-width: 0.35em;
+  background-image: none;
+}
+
+:where(#mount) [type="checkbox"][role="switch"] {
+  --background-color: var(--switch-background-color);
+  --border-color: var(--switch-background-color);
+  --color: var(--switch-color);
+  width: 2.25em;
+  height: 1.25em;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 1.25em;
+  background-color: var(--background-color);
+  line-height: 1.25em;
+}
+:where(#mount) [type="checkbox"][role="switch"]:focus {
+  --background-color: var(--switch-background-color);
+  --border-color: var(--switch-background-color);
+}
+:where(#mount) [type="checkbox"][role="switch"]:checked {
+  --background-color: var(--switch-checked-background-color);
+  --border-color: var(--switch-checked-background-color);
+}
+:where(#mount) [type="checkbox"][role="switch"]:before {
+  display: block;
+  width: calc(1.25em - (var(--border-width) * 2));
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--color);
+  content: "";
+  transition: margin 0.1s ease-in-out;
+}
+:where(#mount) [type="checkbox"][role="switch"]:checked {
+  background-image: none;
+}
+:where(#mount) [type="checkbox"][role="switch"]:checked::before {
+  margin-left: calc(1.125em - var(--border-width));
+  -webkit-margin-start: calc(1.125em - var(--border-width));
+  margin-inline-start: calc(1.125em - var(--border-width));
+}
+
+:where(#mount) [type="checkbox"][aria-invalid="false"],
+:where(#mount) [type="checkbox"]:checked[aria-invalid="false"],
+:where(#mount) [type="radio"][aria-invalid="false"],
+:where(#mount) [type="radio"]:checked[aria-invalid="false"],
+:where(#mount) [type="checkbox"][role="switch"][aria-invalid="false"],
+:where(#mount) [type="checkbox"][role="switch"]:checked[aria-invalid="false"] {
+  --border-color: var(--form-element-valid-border-color);
+}
+:where(#mount) [type="checkbox"][aria-invalid="true"],
+:where(#mount) [type="checkbox"]:checked[aria-invalid="true"],
+:where(#mount) [type="radio"][aria-invalid="true"],
+:where(#mount) [type="radio"]:checked[aria-invalid="true"],
+:where(#mount) [type="checkbox"][role="switch"][aria-invalid="true"],
+:where(#mount) [type="checkbox"][role="switch"]:checked[aria-invalid="true"] {
+  --border-color: var(--form-element-invalid-border-color);
+}
+
+.text-black {
+  color: var(--text-black-2);
+}
+
+.text-gray-2 {
+  color: var(--text-gray-2);
+}
+
+.text-gray-6 {
+  color: var(--text-gray-6);
+}
+
+.text-gray-9 {
+  color: var(--text-gray-9);
+}
+
+.text-gray-c2 {
+  color: var(--text-gray-c2);
+}
+
+.pt-4 {
+  padding-top: 16px;
+}
+
+.p-2 {
+  padding: 8px;
+}
+
+.pl-5 {
+  padding-left: 48px;
+}
+
+.p-0 {
+  padding: 0;
+}
+
+.pl-2 {
+  padding-left: 8px;
+}
+
+.pl-4 {
+  padding-left: 24px;
+}
+
+.pt-2 {
+  padding-top: 8px;
+}
+
+.pb-2 {
+  padding-bottom: 8px;
+}
+
+.pb-4 {
+  padding-bottom: 16px;
+}
+
+.pb-5 {
+  padding-bottom: 20px;
+}
+
+.pr-5 {
+  padding-right: 48px;
+}
+
+.text-sm {
+  font-size: 13px;
+}
+
+.text-base {
+  font-size: 16px;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.mb-0 {
+  margin-bottom: 0px;
+}
+
+.mb-2 {
+  margin-bottom: 8px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.mb-3 {
+  margin-bottom: 12px;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.py-2 {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.py-2-5 {
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.mt-0 {
+  margin-top: 0;
+}
+
+.mt-2 {
+  margin-top: 8px;
+}
+
+.mt-3 {
+  margin-top: 12px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mt-5 {
+  margin-top: 20px;
+}
+
+.mt-6 {
+  margin-top: 24px;
+}
+
+.mb-1 {
+  margin-bottom: 4px;
+}
+
+.ml-4 {
+  margin-left: 24px;
+}
+
+.ml-3 {
+  margin-left: 16px;
+}
+
+.ml-2 {
+  margin-left: 8px;
+}
+
+.ml-1 {
+  margin-left: 4px;
+}
+
+.mr-1 {
+  margin-right: 4px;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
+
+.mr-3 {
+  margin-right: 16px;
+}
+
+.mx-2 {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.pl-3 {
+  padding-left: 12px;
+}
+
+.pr-3 {
+  padding-right: 12px;
+}
+
+.p-3 {
+  padding: 12px;
+}
+
+.px-1 {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.px-3 {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.pt-3 {
+  padding-top: 12px;
+}
+
+.px-6 {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.px-4 {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.pt-6 {
+  padding-top: 20px;
+}
+
+.py-3 {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.py-0 {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.left-auto {
+  left: auto !important;
+}
+
+.max-h-28 {
+  max-height: 112px;
+}
+
+.max-h-30 {
+  max-height: 120px;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
+.text-xs {
+  font-size: 12px;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-3 {
+  flex: 3;
+}
+
+.flex-4 {
+  flex: 4;
+}
+
+.flex-2 {
+  flex: 2;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.max-content {
+  width: max-content;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.items-baseline {
+  align-items: baseline;
+}
+
+.my-5 {
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
+
+.my-4 {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.my-3 {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.pt-3 {
+  padding-top: 12px;
+}
+
+.px-3 {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.pt-2 {
+  padding-top: 8px;
+}
+
+.px-2 {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.pt-1 {
+  padding-top: 4px;
+}
+
+.px-1 {
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.pb-2 {
+  padding-bottom: 8px;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.w-auto {
+  width: auto;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.close {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  background-image: var(--icon-close);
+  background-position: center;
+  background-size: auto 1rem;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  transition: opacity var(--transition);
+}
+
+.padding-two-column {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.muted {
+  color: #999;
+}
+
+.text-label {
+  color: #666;
+}
+
+.display-none {
+  display: none;
+}
+
+/* dark use #18232c */
+@media (prefers-color-scheme: dark) {
+  .text-label {
+    color: #9ca3af;
+  }
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+.text-decoration-none:is([aria-current], :hover, :active, :focus),
+[role="link"]:is([aria-current], :hover, :active, :focus) {
+  --text-decoration: none !important;
+  background-color: transparent !important;
+}
+
+.text-overflow-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.max-w-20 {
+  max-width: 180px;
+  white-space: nowrap;
+}
+
+[data-theme="light"],
+#mount:not([data-theme="dark"]) {
+  --popup-footer-background-color: #e8eaeb;
+  --popup-content-background-color: #ffffff;
+  --popup-item-background-color: #f3f5f6;
+  --popup-item-hover-background-color: #eaeced;
+  --popup-trial-pro-background-color: #f9fbfc;
+  --service-select-content-shadow: 0px 2px 12px 0px rgba(75, 76, 77, 0.2);
+  --service-select-border-color: #fafafa;
+  --service-select-selected-background-color: #f3f5f6;
+  --download-app-background: #f3f5f6;
+}
+
+[data-theme="dark"] {
+  --popup-footer-background-color: #0d0d0d;
+  --popup-content-background-color: #191919;
+  --popup-item-background-color: #272727;
+  --popup-item-hover-background-color: #333333;
+  --popup-trial-pro-background-color: #222222;
+  --service-select-content-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.9);
+  --service-select-border-color: #2c2c2c;
+  --service-select-selected-background-color: #333333;
+  --download-app-background: #333;
+}
+
+#mount {
+  min-width: 268px;
+}
+
+body {
+  padding: 0;
+  margin: 0 auto;
+  min-width: 268px;
+  border-radius: 10px;
+}
+
+.popup-container {
+  font-size: 16px;
+  --font-size: 16px;
+  color: #666;
+  background-color: var(--popup-footer-background-color);
+  width: 316px;
+  min-width: 316px;
+}
+
+.popup-content {
+  background-color: var(--popup-content-background-color);
+  border-radius: 0px 0px 12px 12px;
+  padding: 16px 20px;
+}
+
+.immersive-translate-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  touch-action: none;
+}
+
+.immersive-translate-popup-wrapper {
+  background: var(--background-color);
+  border-radius: 10px;
+  border: 1px solid var(--muted-border-color);
+}
+
+.main-button {
+  font-size: 15px;
+  vertical-align: middle;
+  border-radius: 12px;
+  padding: unset;
+  height: 44px;
+  line-height: 44px;
+}
+
+select.language-select,
+select.translate-service,
+select.min-select {
+  --form-element-spacing-horizontal: 0;
+  margin-bottom: 0px;
+  max-width: unset;
+  flex: 1;
+  overflow: hidden;
+  font-size: 13px;
+  border: none;
+  border-radius: 8px;
+  padding-right: 30px;
+  padding-left: 0px;
+  background-position: center right 12px;
+  background-size: 16px auto;
+  background-image: var(--icon-xia);
+  text-overflow: ellipsis;
+  color: var(--text-gray-2);
+  background-color: transparent;
+  box-shadow: unset !important;
+  cursor: pointer;
+}
+
+select.more {
+  background-position: center right;
+  padding-right: 20px;
+}
+
+select.translate-service {
+  color: var(--text-black-2);
+}
+
+.min-select-container.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.popup-footer {
+  background-color: var(--popup-footer-background-color);
+  height: 40px;
+}
+
+.language-select-container {
+  position: relative;
+  width: 100%;
+  background-color: var(--popup-item-background-color);
+  height: 55px;
+  border-radius: 12px;
+}
+
+select.language-select {
+  color: var(--text-black-2);
+  font-size: 14px;
+  padding: 8px 24px 24px 16px;
+  position: absolute;
+  border-radius: 12px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.language-select-container label {
+  position: absolute;
+  bottom: 10px;
+  left: 16px;
+  font-size: 12px;
+  color: var(--text-gray-9);
+  line-height: 12px;
+  margin: 0;
+}
+
+.translation-service-container {
+  background-color: var(--popup-item-background-color);
+  border-radius: 12px;
+}
+
+.min-select-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  background-color: var(--popup-item-background-color);
+  padding-left: 16px;
+}
+
+.min-select-container:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.min-select-container:last-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.min-select-container:only-child {
+  border-radius: 10px;
+}
+
+.translate-mode {
+  width: 44px;
+  height: 44px;
+  border-radius: 22px;
+  background-color: var(--popup-item-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.translate-mode svg {
+  fill: var(--text-gray-2);
+}
+
+.widgets-container {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 100%;
+  gap: 9px;
+}
+
+/* 当只有两个小组件时的样式优化 */
+.widgets-container.widgets-two-items {
+  gap: 16px;
+}
+
+.widgets-container.widgets-two-items .widget-item {
+  flex: 0 1 auto;
+  min-width: 93px;
+  max-width: 120px;
+}
+
+.widget-item {
+  display: flex;
+  max-width: 93px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--popup-item-background-color);
+  font-size: 12px;
+  min-height: 44px;
+  height: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  flex: 1;
+  padding: 8px 4px;
+  text-align: center;
+}
+
+.widget-icon-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-gray-2);
+}
+
+.widgets-container svg {
+  fill: var(--text-gray-2);
+  color: var(--text-gray-2);
+}
+
+.share-button-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 2px 3px 0 8px;
+}
+
+.share-button-container svg {
+  fill: var(--text-gray-9);
+}
+
+.min-select-container:hover,
+.language-select-container:hover,
+.widget-item:hover,
+.translate-mode:hover {
+  background-color: var(--popup-item-hover-background-color);
+}
+
+.main-button:hover {
+  background-color: #f5508f;
+}
+
+.share-button-container:hover {
+  background-color: var(--popup-item-background-color);
+  border-radius: 6px;
+}
+
+.error-boundary {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  display: flex;
+  padding: 12px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.88);
+  word-break: break-all;
+  margin: 12px;
+  border-radius: 12px;
+  flex-direction: column;
+}
+
+.upgrade-pro {
+  border-radius: 11px;
+  background: linear-gradient(57deg, #272727 19.8%, #696969 82.2%);
+  padding: 2px 8px;
+  transform: scale(0.85);
+}
+
+.upgrade-pro span {
+  background: linear-gradient(180deg, #ffeab4 17.65%, #f8c235 85.29%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+.upgrade-pro svg {
+  margin-top: -2px;
+}
+
+.upgrade-pro:hover {
+  background: linear-gradient(57deg, #3d3d3d 19.8%, #949494 82.2%);
+}
+
+.border-bottom-radius-0 {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.trial-pro-container {
+  border-radius: 0px 0px 12px 12px;
+  background: var(--popup-trial-pro-background-color);
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding-left: 16px;
+  padding-right: 12px;
+  font-size: 12px;
+}
+
+.trial-pro-container label {
+  line-height: 13px;
+  color: var(--text-black-2);
+}
+
+.trial-pro-container img {
+  margin-left: 5px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.upgrade-pro-discount-act {
+  height: 25px;
+  display: flex;
+  padding: 0 4px;
+  align-items: center;
+  border-radius: 15px;
+  background: linear-gradient(
+    90deg,
+    #cefbfa 11.33%,
+    #d7f56f 63.75%,
+    #fccd5e 100%
+  );
+  transform: scale(0.9);
+  box-shadow: 0px 1.8px 3.6px 0px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+
+.upgrade-pro-discount-act span {
+  font-size: 12px;
+  font-weight: 700;
+  margin-left: 4px;
+  color: #222222;
+}
+
+.upgrade-pro-discount-act:hover {
+  text-decoration: unset;
+  background: linear-gradient(
+    90deg,
+    #e2fffe 11.33%,
+    #e6ff91 63.75%,
+    #ffdf93 100%
+  );
+}
+
+.custom-select-container {
+  width: 200px;
+  position: relative;
+  flex: 1;
+}
+
+#translation-service-select {
+  padding-right: 12px;
+  padding-left: 6px;
+}
+
+.custom-select-content {
+  border-radius: 12px;
+  background: var(--popup-content-background-color);
+  box-shadow: var(--service-select-content-shadow);
+  border: 1px solid var(--service-select-border-color);
+  padding: 8px;
+  position: absolute;
+  left: -68px;
+  right: 0;
+  z-index: 100;
+  overflow-y: auto;
+}
+
+.custom-select-item.default {
+  width: 100%;
+  padding: 0;
+}
+
+.custom-select-item {
+  font-size: 14px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-black-2);
+  width: auto;
+  overflow: hidden;
+  height: 30px;
+  line-height: 30px;
+}
+
+.custom-select-item-img {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .custom-select-item-img {
+    margin-right: 6px;
+  }
+}
+
+.custom-select-content .custom-select-item.selected,
+.custom-select-content .custom-select-item:hover {
+  background: var(--service-select-selected-background-color);
+}
+
+.custom-select-item > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.custom-select-item-pro {
+  font-size: 12px;
+  margin-left: 6px;
+  display: flex;
+}
+
+.custom-select-item-pro img {
+  margin: 0 3px;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.service-select-inline-sponsor-container {
+  width: 40px;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.service-select-inline-sponsor-marquee {
+  min-width: max-content;
+  display: inline-flex;
+  align-items: center;
+  column-gap: 12px;
+  animation: service-select-inline-sponsor-scroll 10s linear infinite;
+}
+
+.service-select-inline-sponsor-track {
+  min-width: max-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+@keyframes service-select-inline-sponsor-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 6px));
+  }
+}
+
+.custom-select-group-header {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-gray-9);
+  padding: 6px 8px 4px;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+
+.more-container {
+  position: relative;
+}
+
+.new-menu-indicator {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #ef3434;
+  border-radius: 50%;
+  right: 18px;
+  top: 4px;
+}
+
+.download-app {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 8px;
+  background: var(--download-app-background);
+  padding: 4px 8px;
+  color: var(--text-gray-6);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Popup 动画效果 */
+@keyframes popup-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes popup-fade-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+}
+
+.popup-generic-content {
+  animation: popup-fade-in 0.2s ease-out;
+}
+
+.popup-generic-content.hiding {
+  animation: popup-fade-out 0.15s ease-in;
+}
+
+select.min-select {
+  --form-element-spacing-horizontal: 0;
+  max-width: 128px;
+  overflow: hidden;
+  color: var(--primary);
+  font-size: 13px;
+  border: none;
+  padding: 0;
+  padding-right: 20px;
+  text-overflow: ellipsis;
+  color: var(--color);
+}
+select.min-select-secondary {
+  color: var(--color);
+}
+select.min-select:focus {
+  outline: none;
+  border: none;
+  --box-shadow: none;
+}
+
+select.min-select-left {
+  padding-right: 0px;
+  /* padding-left: 24px; */
+  /* background-position: center left 0; */
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+select.transform-padding-left {
+  padding-left: 12px;
+  transform: translateX(-12px);
+  background-position: center right 0px;
+}
+
+select.text-gray-6 {
+  color: var(--text-gray-6);
+}
+
+/* dark use black, for windows */
+@media (prefers-color-scheme: dark) {
+  select.language-select option,
+  select.translate-service option,
+  select.min-select option {
+    background-color: #666666;
+  }
+}
+
+select.min-select-no-arrow {
+  background-image: none;
+  padding-right: 0;
+}
+
+
+
+.activity-tips {
+  border-radius: 8px;
+  padding: 0px 8px;
+  min-height: 28px;
+  background: linear-gradient(83deg, #FACCDE -0.87%, #FCE7EF 43.13%, #FBD6E4 72.08%, #FFB3D1 96.34%);  gap: 2px;
+  color: #333;
+  cursor: pointer;
+  gap: 4px;
+}
+
+.activity-tips-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.countdown-container {
+  min-width: 50px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+.activity-tips-text {
+  font-weight: 600;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html {
+  font-size: 17px;
+}
+
+@media print {
+  .imt-fb-container {
+    display: none !important;
+  }
+}
+
+#mount {
+  position: absolute;
+  display: none;
+  min-width: 250px;
+  height: auto;
+  --font-size: 17px;
+  font-size: 17px;
+}
+
+/* float-ball */
+.imt-fb-container {
+  position: fixed;
+  padding: 0;
+  top: 335px;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  display: none;
+  direction: ltr;
+  background-color: transparent !important;
+}
+
+.imt-fb-container:hover .imt-manga-button {
+  opacity: 1;
+}
+
+.imt-fb-container.left {
+  align-items: flex-start;
+  left: 0;
+}
+
+.imt-fb-container.right {
+  align-items: flex-end;
+  right: 0;
+}
+
+.imt-fb-btn {
+  cursor: pointer;
+  background: var(--float-ball-more-button-background-color);
+  height: 36px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.08);
+}
+
+.imt-fb-btn.left {
+  border-top-right-radius: 36px;
+  border-bottom-right-radius: 36px;
+  padding-left: 3px;
+}
+
+.imt-fb-btn.right {
+  border-top-left-radius: 36px;
+  border-bottom-left-radius: 36px;
+  padding-right: 3px;
+}
+
+.imt-fb-btn.mini.left {
+  transform: translateX(-22px);
+}
+
+.imt-fb-btn.mini.right {
+  transform: translateX(22px);
+}
+
+.imt-fb-btn.mini.active {
+  transform: translateX(0);
+}
+
+.imt-fb-btn div {
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+}
+
+.imt-fb-btn .imt-fb-hit-area {
+  position: absolute;
+  top: 0;
+  height: 36px;
+  bottom: -6px;
+  left: -6px;
+  right: -6px;
+  background: transparent;
+}
+
+.imt-fb-btn.mini.right .imt-fb-hit-area {
+  left: -10px;
+}
+
+.imt-fb-btn.mini.left .imt-fb-hit-area {
+  right: -10px;
+}
+
+.imt-fb-btn.left div {
+  border-top-right-radius: 34px;
+  border-bottom-right-radius: 34px;
+  justify-content: flex-end;
+}
+
+.imt-fb-btn.right div {
+  border-top-left-radius: 34px;
+  border-bottom-left-radius: 34px;
+}
+
+.imt-fb-logo-img {
+  width: 20px;
+  height: 20px;
+  margin: 0 10px;
+}
+
+.imt-fb-logo-img-big-bg {
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  background-color: #ed6d8f;
+  border-radius: 50%;
+  margin: 0 5px;
+}
+
+.imt-float-ball-translated {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  bottom: 4px;
+  right: 4px;
+}
+
+.btn-animate {
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transition: -webkit-transform ease-out 250ms;
+  transition: -webkit-transform ease-out 250ms;
+  transition: transform ease-out 250ms;
+  transition: transform ease-out 250ms, -webkit-transform ease-out 250ms;
+}
+
+.imt-fb-setting-btn {
+  margin-right: 18px;
+  width: 28px;
+  height: 28px;
+}
+
+.immersive-translate-popup-wrapper {
+  background: var(--background-color);
+  border-radius: 20px;
+  box-shadow: 2px 10px 24px 0px #0e121614;
+  border: none;
+}
+
+.popup-container {
+  border-radius: 20px;
+}
+
+.popup-content {
+  border-radius: 20px 20px 12px 12px;
+}
+.popup-footer {
+  border-radius: 20px;
+}
+
+.imt-fb-close-button {
+  cursor: pointer;
+  position: absolute;
+  left: -10px;
+  bottom: -20px;
+}
+.imt-fb-container.left .imt-fb-close-button {
+  left: auto;
+  right: -10px;
+}
+
+.imt-fb-close-content {
+  padding: 22px;
+  width: 320px;
+  pointer-events: all;
+}
+
+.imt-fb-close-title {
+  font-weight: 500;
+  color: var(--text-black-2);
+}
+
+.imt-fb-close-radio-content {
+  background-color: var(--background-light-green);
+  padding: 8px 20px;
+}
+
+.imt-fb-radio-sel,
+.imt-fb-radio-nor {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.imt-fb-radio-sel {
+  border: 2px solid var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imt-fb-radio-sel div {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: var(--primary);
+}
+
+.imt-fb-radio-nor {
+  border: 2px solid var(--input-border-strong);
+}
+
+.imt-fb-primary-btn {
+  background-color: var(--primary);
+  width: 72px;
+  height: 32px;
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 32px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.imt-fb-default-btn {
+  border: 1px solid var(--primary);
+  width: 72px;
+  height: 32px;
+  border-radius: 8px;
+  color: var(--primary);
+  line-height: 32px;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.imt-fb-guide-container {
+  width: 312px;
+  transform: translateY(-45%);
+}
+
+.imt-fb-guide-bg {
+  position: absolute;
+  left: 30px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  height: 100%;
+  width: 90%;
+}
+
+.imt-fb-guide-bg.left {
+  transform: scaleX(-1);
+}
+
+.imt-fb-guide-content {
+  margin: 16px -30px 80px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.imt-fb-guide-content.left {
+  margin: 16px 21px 60px 32px;
+}
+
+.imt-fb-guide-img {
+  width: 220px;
+  height: 112px;
+}
+
+.imt-fb-guide-message {
+  font-size: 14px;
+  line-height: 28px;
+  color: #333333;
+  white-space: pre-wrap;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.imt-manga-guide-message {
+  font-size: 16px;
+  line-height: 24px;
+  color: #333333;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.imt-fb-guide-button {
+  margin-top: 16px;
+  line-height: 40px;
+  height: 40px;
+  padding: 0 20px;
+  width: unset;
+}
+
+.imt-fb-side {
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: all;
+  position: relative;
+}
+
+.imt-fb-side {
+  margin: 10px 0;
+}
+
+.imt-fb-side::before,
+.imt-manga-button::before,
+.imt-fb-round-button::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  bottom: 2px;
+  left: 2px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 0.15s ease;
+}
+
+.imt-fb-side:hover::before,
+.imt-manga-button:hover::before,
+.imt-fb-round-button:hover::before {
+  background-color: var(--float-ball-more-button-hover-color);
+}
+
+.imt-fb-new-badge {
+  width: 26px;
+  height: 14px;
+  padding: 3px;
+  background-color: #f53f3f;
+  border-radius: 4px;
+  position: absolute;
+  top: -5px;
+  right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imt-fb-side * {
+  pointer-events: all;
+}
+
+.imt-fb-pin-icon {
+  position: absolute;
+  left: -16px;
+  bottom: -12px;
+  opacity: 0;
+  cursor: pointer;
+}
+.imt-fb-container.left .imt-fb-pin-icon {
+  left: auto;
+  right: -16px;
+}
+
+.imt-fb-side:hover .imt-fb-pin-icon {
+  opacity: 1;
+}
+
+.imt-fb-more-button {
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+/* Sheet.css */
+.immersive-translate-sheet {
+  position: fixed;
+  transform: translateY(100%);
+  /* Start off screen */
+  left: 0;
+  right: 0;
+  background-color: var(--background-color);
+  transition: transform 0.3s ease-out;
+  /* Smooth slide transition */
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.1);
+  /* Ensure it's above other content */
+  bottom: 0;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  overflow: hidden;
+}
+
+.immersive-translate-sheet.visible {
+  transform: translateY(0);
+}
+
+.immersive-translate-sheet-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.immersive-translate-sheet-backdrop.visible {
+  opacity: 1;
+}
+
+.popup-container-sheet {
+  max-width: 100vw;
+  width: 100vw;
+}
+
+.imt-no-events svg * {
+  pointer-events: none !important;
+}
+
+.imt-manga-button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: all;
+  margin: 0 0 10px 0;
+  background-color: var(--float-ball-more-button-background-color);
+  border-radius: 50%;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+  right: 8px;
+}
+
+.imt-manga-feedback {
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.imt-fb-round-button {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--float-ball-more-button-background-color);
+  border-radius: 50%;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.imt-fb-round-button > svg {
+  z-index: 1;
+}
+
+.imt-fb-upgrade-button {
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.imt-manga-translated {
+  position: absolute;
+  left: 24px;
+  top: 20px;
+}
+
+.imt-float-ball-loading {
+  animation: imt-loading-animation 0.6s infinite linear !important;
+}
+
+.imt-manga-guide-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: -1;
+  width: 100%;
+  transform: translateY(-50%);
+}
+.imt-manga-guide-content {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  right: 0;
+  margin: 0 40px 0;
+}
+
+.img-manga-guide-button {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.img-manga-close {
+  position: absolute;
+  bottom: -200px;
+  width: 32px;
+  height: 32px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  cursor: pointer;
+}
+
+.imt-fb-container.dragging .imt-manga-button,
+.imt-fb-container.dragging .btn-animate:not(.imt-fb-btn) {
+  display: none !important;
+}
+
+.imt-fb-container.dragging .imt-fb-btn {
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  cursor: move !important;
+}
+
+.imt-fb-container.dragging .imt-fb-btn div {
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+}
+
+.imt-fb-container.dragging .imt-fb-btn.left,
+.imt-fb-container.dragging .imt-fb-btn.right {
+  border-radius: 50% !important;
+}
+
+.imt-fb-container.dragging .imt-fb-btn.left div,
+.imt-fb-container.dragging .imt-fb-btn.right div {
+  border-radius: 50% !important;
+}
+
+.imt-fb-container.dragging .imt-fb-logo-img {
+  margin: 0 !important;
+}
+
+.imt-fb-container.dragging .imt-float-ball-translated {
+  right: 2px !important;
+  bottom: 2px !important;
+}
+
+@-webkit-keyframes imt-loading-animation {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+@keyframes imt-loading-animation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.imt-fb-icon {
+  color: #666666;
+}
+
+[data-theme="dark"] .imt-fb-icon {
+  color: #b3b3b3;
+}
+
+[data-theme="light"] .imt-fb-icon {
+  color: #666666;
+}
+
+/* 悬浮球设置弹窗样式 */
+.imt-fb-setting-wrapper {
+  border-radius: 12px;
+  box-shadow: 2px 10px 24px 0px rgba(0, 0, 0, 0.06);
+}
+
+.imt-fb-setting-content {
+  padding: 16px;
+  width: 350px;
+  pointer-events: all;
+}
+
+.imt-fb-setting-title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text-black-2);
+}
+
+.imt-fb-setting-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 24px 0;
+}
+
+.imt-fb-preview-wrapper {
+  display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.imt-fb-preview-item {
+  width: 99px;
+  height: 57px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  overflow: hidden;
+}
+
+.imt-fb-preview-item.light {
+  background-color: #f3f5f6;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.imt-fb-preview-item.dark {
+  background-color: #444;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.imt-fb-preview-ball {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.imt-fb-preview-ball.light {
+  background-color: #fff;
+  border-top-left-radius: 36px;
+  border-bottom-left-radius: 36px;
+}
+
+.imt-fb-preview-ball.dark {
+  background-color: #111;
+  border-top-left-radius: 36px;
+  border-bottom-left-radius: 36px;
+}
+
+.imt-fb-preview-ball.full {
+  width: 41px;
+  justify-content: center;
+}
+
+.imt-fb-preview-ball.mini {
+  width: 41px;
+  justify-content: center;
+  transform: translateX(21px);
+}
+
+.imt-fb-preview-ball .imt-fb-preview-logo {
+  flex-shrink: 0;
+}
+
+/* 选项区域 */
+.imt-fb-setting-options {
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.imt-fb-setting-option-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.imt-fb-setting-option-label {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: var(--text-black-2);
+}
+
+/* Toggle 开关样式 */
+.imt-fb-toggle {
+  width: 30px;
+  height: 18px;
+  background-color: var(--switch-background-color);
+  border-radius: 24px;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.imt-fb-toggle.checked {
+  background-color: var(--primary);
+}
+
+.imt-fb-toggle.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.imt-fb-toggle-thumb {
+  width: 14px;
+  height: 14px;
+  background-color: var(--switch-color);
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s ease;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.08);
+}
+
+.imt-fb-toggle.checked .imt-fb-toggle-thumb {
+  transform: translateX(12px);
+}
+
+.imt-fb-setting-hide-options {
+  background-color: var(--background-light-green);
+  padding: 8px 20px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.imt-fb-setting-save-btn {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 45px;
+  height: 45px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: opacity 0.2s ease;
+}
+
+.imt-fb-setting-save-btn:hover {
+  opacity: 0.9;
+}
+
+.imt-fb-setting-save-btn:active {
+  opacity: 0.8;
+}
+</style><div id="mount" style="display: block;"><div hidden="" id="immersive-translate-popup-overlay" class="immersive-translate-popup-overlay" style="z-index: 2147483647; background-color: rgba(0, 0, 0, 0.5);"><div class="immersive-translate-popup-wrapper" style="position: fixed; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%);"></div></div></div></template></div></html>
